@@ -63,6 +63,14 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 @media(max-height:500px) and (orientation:landscape){.play-shell{padding-top:10px}.play-shell>header{margin-bottom:4px}.play-shell .eyebrow,.play-shell .intro{display:none}.play-shell h1{font-size:28px}.play-shell .daily-heading{padding:5px 0}.play-shell .game-meta{margin-top:5px}.play-shell .wheel-stage[data-phase='ready'],.play-shell .wheel-stage[data-phase='ready'] .arena,.play-shell .wheel-stage[data-phase='spinning'][data-spin='both'],.play-shell .wheel-stage[data-phase='spinning'][data-spin='both'] .arena{min-height:200px;height:200px}.play-shell .spin-button{width:96px;height:96px;font-size:18px}.play-shell .spin-gate{gap:8px}.play-shell .spin-caption{margin:0}.nav-inner{padding-block:8px}}
 #email-dialog h2{font-size:26px;line-height:1.15;letter-spacing:-.03em}#email-dialog>p{font-size:14px;color:var(--ink-2)}#email-form{display:grid;gap:12px}#email-form label{font-size:13px;font-weight:700}#email-input{width:100%;min-height:50px;border:1px solid var(--line);border-radius:8px;background:var(--ground);color:var(--ink);font:16px var(--body);padding:12px}#prize-result{border-color:#dc0005}
 .wheel-stage .guess.hi{background:#147a43;border-color:#147a43;color:#fff}.wheel-stage .guess.lo{background:#dc0005;border-color:#dc0005;color:#fff}.wheel-stage .guess.hi:hover:not(:disabled){background:#106336;border-color:#106336}.wheel-stage .guess.lo:hover:not(:disabled){background:#aa0004;border-color:#aa0004}
+
+/* Seçili coin halkası ve ok, coinin kendi renginde */
+.left-wheel{--coin:var(--coin-left,var(--brand))}.right-wheel{--coin:var(--coin-right,var(--brand))}
+.wheel-slot.is-selected{box-shadow:0 0 0 9px var(--surface),0 0 0 11px var(--coin)!important;transition:box-shadow .3s}
+.left-wheel .wheel-pointer{border-right-color:var(--coin)}.right-wheel .wheel-pointer{border-left-color:var(--coin)}
+.wheel-stage[data-phase='spinning'] .wheel-slot.is-selected{box-shadow:0 0 0 8px var(--surface),0 0 0 9px var(--line)!important}
+.wheel-stage[data-phase='spinning'][data-spin='right'] .left-wheel .wheel-slot.is-selected{box-shadow:0 0 0 9px var(--surface),0 0 0 11px var(--coin)!important}
+@media(max-width:600px){.wheel-slot.is-selected{box-shadow:0 0 0 5px var(--surface),0 0 0 7px var(--coin)!important}.wheel-stage[data-phase='spinning'][data-spin='right'] .left-wheel .wheel-slot.is-selected{box-shadow:0 0 0 5px var(--surface),0 0 0 7px var(--coin)!important}}
 </style>
 </head>
 <body>
@@ -136,6 +144,8 @@ window.STABLEX_ASSETS={"assets/stablex-logo-white.svg": "data:image/svg+xml;base
 /* Extracted from the supplied prototype. Shared by browser and Node; no credentials. */
 (function(root,factory){const api=factory();if(typeof module==='object')module.exports=api;else root.StablexGame=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 const LISTING={"AAVE": "aave", "ADA": "cardano", "ALGO": "algorand", "ANKR": "ankr", "APE": "apecoin", "ARB": "arbitrum", "ATOM": "cosmos", "AUDIO": "audius", "AVAX": "avalanche-2", "AXS": "axie-infinity", "BAT": "basic-attention-token", "BONK": "bonk", "BTC": "bitcoin", "CHZ": "chiliz", "COMP": "compound-governance-token", "CRV": "curve-dao-token", "DOGE": "dogecoin", "DOT": "polkadot", "EIGEN": "eigenlayer", "ENA": "ethena", "ENS": "ethereum-name-service", "ETHFI": "ether-fi", "ETH": "ethereum", "FET": "fetch-ai", "FLOKI": "floki", "GALA": "gala", "GRT": "the-graph", "IMX": "immutable-x", "IO": "io", "JASMY": "jasmycoin", "JTO": "jito-governance-token", "JUP": "jupiter-exchange-solana", "LDO": "lido-dao", "LINK": "chainlink", "LPT": "livepeer", "LTC": "litecoin", "MANA": "decentraland", "MORPHO": "morpho", "ONDO": "ondo-finance", "PAXG": "pax-gold", "PENDLE": "pendle", "PENGU": "pudgy-penguins", "PEPE": "pepe", "PLUME": "plume", "POL": "polygon-ecosystem-token", "PUMP": "pump-fun", "PYTH": "pyth-network", "QNT": "quant-network", "RENDER": "render-token", "SAHARA": "sahara-ai", "SAND": "the-sandbox", "SHIB": "shiba-inu", "SKL": "skale", "SKY": "sky", "SOL": "solana", "STRK": "starknet", "STX": "blockstack", "TRUMP": "official-trump", "TRX": "tron", "UNI": "uniswap", "USDC": "usd-coin", "USDT": "tether", "VIRTUAL": "virtual-protocol", "WIF": "dogwifcoin", "WLD": "worldcoin-wld", "W": "wormhole", "XAUT": "tether-gold", "XLM": "stellar", "XRP": "ripple", "XTZ": "tezos", "ZRO": "layerzero", "ZRX": "0x", "LIT": "lighter", "MET": "meteora", "SENT": "sentient"};
+// Seçili coin halkası için logodan çıkarılmış baskın renk (tek renkli logolar açık gri).
+const COIN_COLORS={"AAVE":"#519ebd","ADA":"#3d7bff","ALGO":"#d4d4d4","ANKR":"#356ef5","APE":"#0755f8","ARB":"#466fb9","ATOM":"#4653b9","AUDIO":"#921fe0","AVAX":"#e84142","AXS":"#0065ff","BAT":"#fe4623","BONK":"#ffe000","BTC":"#f7931a","CHZ":"#ff0051","COMP":"#00ffb4","CRV":"#d4d4d4","DOGE":"#c8aa37","DOT":"#ff0087","EIGEN":"#371ae5","ENA":"#d4d4d4","ENS":"#d4d4d4","ETH":"#7f8ef0","ETHFI":"#d4d4d4","FET":"#4665b9","FLOKI":"#f79a23","GALA":"#d4d4d4","GRT":"#6747ed","IMX":"#d4d4d4","IO":"#d4d4d4","JASMY":"#f8951c","JTO":"#d4d4d4","JUP":"#c7f284","LDO":"#f7a778","LINK":"#2a5ada","LIT":"#d4d4d4","LPT":"#4cc48a","LTC":"#3f71c0","MANA":"#ff5457","MET":"#d4d4d4","MORPHO":"#2a73ff","ONDO":"#d4d4d4","PAXG":"#f5ee0a","PENDLE":"#306ecf","PENGU":"#71a1ff","PEPE":"#58ba45","PLUME":"#d4d4d4","POL":"#8246e5","PUMP":"#54d392","PYTH":"#a47cf3","QNT":"#d4d4d4","RENDER":"#ed1213","SAHARA":"#f4ff70","SAND":"#01a1fe","SENT":"#fd6a8e","SHIB":"#ff0500","SKL":"#d4d4d4","SKY":"#d4d4d4","SOL":"#9945ff","STRK":"#4545ba","STX":"#fc6432","TRUMP":"#f2c14e","TRX":"#ff0509","UNI":"#ff70b5","USDC":"#297cd6","USDT":"#46b99a","VIRTUAL":"#8ae5c9","W":"#d4d4d4","WIF":"#e9a686","WLD":"#d4d4d4","XAUT":"#d3b25b","XLM":"#d4d4d4","XRP":"#d4d4d4","XTZ":"#2b7cf7","ZRO":"#d4d4d4","ZRX":"#d4d4d4"};
 const STABLE=["USDT","USDC","PAXG","XAUT"];
 const DEFAULT_MARKET={date:'2026-09-24',coins:[
  // Piyasa değeri ve 24s hacim, milyar USD
@@ -181,13 +191,13 @@ function hardestRound(rounds){return rounds.reduce((best,row)=>{const gap=Math.a
 function utm(url,mode,content){const u=new URL(url);u.searchParams.set('utm_source','game');u.searchParams.set('utm_medium','hangisi_buyuk');u.searchParams.set('utm_campaign',mode);u.searchParams.set('utm_content',content);return u.href;}
 function coinURL(symbol,mode){if(!LISTING[symbol])throw Error('Unknown coin');return utm('https://stablex.com.tr/piyasalar/'+symbol.toLowerCase()+'try',mode,symbol);}
 function normalizeMarkets(rows){if(!Array.isArray(rows))throw Error('Invalid market data');const byId=new Map(rows.map(r=>[r.id,r]));return Object.entries(LISTING).flatMap(([s,id])=>{const r=byId.get(id);if(!r||String(r.symbol).toUpperCase()!==s||typeof r.market_cap!=='number'||!Number.isFinite(r.market_cap)||r.market_cap<=0||typeof r.total_volume!=='number'||!Number.isFinite(r.total_volume)||r.total_volume<0)return [];return [{s,n:String(r.name).slice(0,100),m:r.market_cap/1e9,v:r.total_volume/1e9,img:'assets/coins/'+s.toLowerCase()+'.png'}];}).sort((a,b)=>a.s<b.s?-1:1);}
-return {LISTING,STABLE,FALLBACK,DATA_DATE,DAILY_SYMBOLS,VERSION,dayKey,rnd,dailyPool,dailySymbols,dailyMatches,nextSeriesAt,hardestRound,utm,coinURL,normalizeMarkets};
+return {COIN_COLORS,LISTING,STABLE,FALLBACK,DATA_DATE,DAILY_SYMBOLS,VERSION,dayKey,rnd,dailyPool,dailySymbols,dailyMatches,nextSeriesAt,hardestRound,utm,coinURL,normalizeMarkets};
 });
 
 'use strict';
 /* Supplied prototype: state, rendering, reveal, advance, endless/daily and share flows retained. */
 const CONFIG={API_BASE:'/api',LOGO_URL:'assets/stablex-logo.svg',LOGO_DARK_URL:'assets/stablex-logo-white.svg',COIN_PAGE_URL:'https://stablex.com.tr/piyasalar/{coin}try',EXCLUDE_STABLE:true};
-const {LISTING,STABLE,FALLBACK,DATA_DATE,dayKey,dailySymbols,dailyMatches,nextSeriesAt,hardestRound,utm,coinURL}=StablexGame;
+const {COIN_COLORS,LISTING,STABLE,FALLBACK,DATA_DATE,dayKey,dailySymbols,dailyMatches,nextSeriesAt,hardestRound,utm,coinURL}=StablexGame;
 const $=id=>document.getElementById(id);
 const assetURL=path=>window.STABLEX_ASSETS?.[path]||path;
 let COINS=[],best=0,serverAvailable=false,runtime={measurementId:'',gameURL:'',debug:false},analyticsConsent=false,analyticsLoaded=false;
@@ -255,6 +265,7 @@ function paintWheel(side,coin){
   const selected=coin?.s||symbols[side==='left'?12:35];
   const offset=Math.max(0,symbols.indexOf(selected));
   const slots=[selected,...symbols.filter(s=>s!==selected).slice(offset).concat(symbols.filter(s=>s!==selected).slice(0,offset)).slice(0,11)];
+  $('wheel-stage')?.style?.setProperty?.('--coin-'+side,(typeof COIN_COLORS==='object'&&COIN_COLORS?.[selected])||'var(--brand)');
   $('wheel-'+side).innerHTML=slots.map((symbol,i)=>`<span class="wheel-slot ${i===0?'is-selected':''}" style="--angle:${(side==='right'?180:0)+i*30}deg"><img src="${assetURL('assets/coins/'+symbol.toLowerCase()+'.png')}" alt=""></span>`).join('');
 }
 function prepareSpin(){
