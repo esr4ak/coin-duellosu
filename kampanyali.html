@@ -109,6 +109,47 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 .coin-wheel{background:radial-gradient(circle,color-mix(in srgb,var(--glow) 22%,transparent),transparent 72%),repeating-conic-gradient(from -15deg,color-mix(in srgb,var(--brand) 5%,var(--surface)) 0deg 29.6deg,var(--line) 29.6deg 30deg)}
 .coin-wheel:after{background:radial-gradient(circle,color-mix(in srgb,var(--glow) 34%,var(--surface)),var(--surface) 78%)}
 @media(prefers-reduced-motion:reduce){.wheel-window{transition:none}}
+
+/* Tipografik hiyerarşi: 1) değer ve başlık  2) coin adı  3) etiketler  4) yardımcı metin */
+.play-shell h1{font-size:30px;font-weight:900;letter-spacing:-.045em;line-height:1.02}
+.play-shell .eyebrow{color:var(--brand);font-size:10px;font-weight:800;letter-spacing:.2em}
+.play-shell .intro{font-size:14px;color:var(--ink-2)}
+.play-shell .score b{font-size:24px;font-weight:900;letter-spacing:-.03em}
+.play-shell .score span{font-size:9.5px;font-weight:800;letter-spacing:.16em}
+.play-shell #session-kind{font-size:14px;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
+.play-shell .daily-heading span,.play-shell .daily-refresh,.play-shell #status{font-size:11px;color:var(--ink-2);opacity:.85}
+.play-shell #progress{font-size:11px;font-weight:800;letter-spacing:.08em}
+.wheel-stage .card#left .card-label,.wheel-stage .card#right .card-label{font-size:10px;font-weight:800;letter-spacing:.18em;color:var(--ink-2)}
+.wheel-stage .card#right .card-label{color:var(--brand)}
+.wheel-stage .card#left .name,.wheel-stage .card#right .name{font-size:17px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.wheel-stage .card#left .metric-label,.wheel-stage .card#right .metric-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);opacity:.8}
+.wheel-stage .card#left .value,.wheel-stage .card#right .value{font-size:32px;font-weight:900;letter-spacing:-.045em;line-height:1.05;color:var(--ink)}
+.wheel-stage .card#right .value.hidden-val{color:var(--ink-2);letter-spacing:.12em;font-weight:800}
+.wheel-stage .card#right.win .value{color:var(--up)}.wheel-stage .card#right.lose .value{color:var(--down)}
+.wheel-stage .card#left .cta,.wheel-stage .card#right .cta{font-size:12px;font-weight:700;color:var(--ink-2)}
+.play-shell .guess{font-size:15px;font-weight:800;letter-spacing:.01em}
+.play-shell #feedback{font-size:13px;color:var(--ink);font-weight:600}
+.panel .result-kicker{font-size:10px;font-weight:800;letter-spacing:.18em;color:var(--ink-2)}
+.panel h2{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.panel>p{font-size:15px}
+.hardest strong{font-size:26px;font-weight:900;letter-spacing:-.03em}
+.countdown-box strong{font-weight:900;letter-spacing:-.02em}
+@media(min-width:901px){
+ .play-shell h1{font-size:56px}
+ .play-shell .intro{font-size:16px}
+ .play-shell .score b{font-size:34px}
+ .play-shell #session-kind{font-size:15px}
+ .play-shell .daily-heading span,.play-shell .daily-refresh,.play-shell #status,.play-shell #progress{font-size:12px}
+ .wheel-stage .card#left .card-label,.wheel-stage .card#right .card-label{font-size:11px}
+ .wheel-stage .card#left .name,.wheel-stage .card#right .name{font-size:24px}
+ .wheel-stage .card#left .metric-label,.wheel-stage .card#right .metric-label{font-size:11px}
+ .wheel-stage .card#left .value,.wheel-stage .card#right .value{font-size:48px}
+ .wheel-stage .card#left .cta,.wheel-stage .card#right .cta{font-size:13px}
+ .play-shell .guess{font-size:16px}
+ .play-shell #feedback{font-size:14px}
+ .panel h2{font-size:30px}
+}
+@media(max-width:360px){.wheel-stage .card#left .value,.wheel-stage .card#right .value{font-size:27px}.play-shell h1{font-size:26px}}
 </style>
 </head>
 <body>
