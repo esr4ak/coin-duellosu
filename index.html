@@ -70,6 +70,35 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 .wheel-stage[data-phase='spinning'] .wheel-slot.is-selected{box-shadow:0 0 0 8px var(--surface),0 0 0 9px var(--line)!important}
 .wheel-stage[data-phase='spinning'][data-spin='right'] .left-wheel .wheel-slot.is-selected{box-shadow:0 0 0 9px var(--surface),0 0 0 11px var(--coin)!important}
 @media(max-width:600px){.wheel-slot.is-selected{box-shadow:0 0 0 5px var(--surface),0 0 0 7px var(--coin)!important}.wheel-stage[data-phase='spinning'][data-spin='right'] .left-wheel .wheel-slot.is-selected{box-shadow:0 0 0 5px var(--surface),0 0 0 7px var(--coin)!important}}
+
+/* === Görsel güncelleme · 24.09.2026 === */
+/* Her zaman koyu Stablex zemini */
+.confetti{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:9999}
+/* Masaüstü: daha geniş sahne, ortalı içerik */
+@media(min-width:901px){
+ .play-shell .wheel-stage,.play-shell .wheel-stage[data-phase],.play-shell .wheel-stage[data-phase][data-spin]{min-height:clamp(420px,calc(100vh - 300px),600px)}
+ .play-shell .wheel-stage .arena,.play-shell .wheel-stage[data-phase] .arena,.play-shell .wheel-stage[data-phase][data-spin] .arena{min-height:clamp(420px,calc(100vh - 300px),600px);height:auto}
+ .wheel-stage{background:radial-gradient(ellipse 55% 75% at 50% 50%,color-mix(in srgb,var(--brand) 8%,var(--surface)),var(--surface) 72%)}
+ #over,.info,.disclaimer,.reward-ticket{width:100%;max-width:780px;align-self:center;box-sizing:border-box}
+ .wheel-stage .value{font-size:36px}
+}
+/* Kartlarda coin rengi */
+.wheel-stage .card{--cc:var(--brand);background:radial-gradient(closest-side at 50% 45%,color-mix(in srgb,var(--cc) 14%,transparent),transparent)!important;transition:background .4s}
+.wheel-stage .sym{display:inline-block;border:1px solid color-mix(in srgb,var(--cc) 75%,transparent);color:var(--ink);border-radius:99px;padding:1px 10px;font-size:12px;font-weight:700;letter-spacing:.06em;align-self:center}
+/* Cevap anı */
+@keyframes ring-ok{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--up) 70%,transparent)}100%{box-shadow:0 0 0 26px transparent}}
+@keyframes ring-no{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--down) 70%,transparent)}100%{box-shadow:0 0 0 26px transparent}}
+@keyframes value-pop{0%{transform:scale(.85)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes value-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.wheel-stage .card#right.win{background:radial-gradient(closest-side at 50% 45%,color-mix(in srgb,var(--up) 22%,transparent),transparent)!important}
+.wheel-stage .card#right.lose{background:radial-gradient(closest-side at 50% 45%,color-mix(in srgb,var(--down) 22%,transparent),transparent)!important}
+.card#right.win .value{animation:value-pop .5s cubic-bezier(.2,1.3,.4,1)}
+.card#right.lose .value{animation:value-shake .45s}
+.vs.ok{animation:ring-ok .7s ease-out}.vs.no{animation:ring-no .7s ease-out}
+/* Skor ünvanı */
+.score-title{align-self:flex-start;width:auto!important;display:inline-flex;align-items:center;border:1.5px solid var(--brand);background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--ink);border-radius:99px;padding:6px 16px;font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.score-title:empty{display:none}
+@media(prefers-reduced-motion:reduce){.card#right.win .value,.card#right.lose .value,.vs.ok,.vs.no{animation:none}}
 </style>
 </head>
 <body>
@@ -110,7 +139,7 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
   </main>
   </div>
   <section class="panel" id="over" tabindex="-1" aria-labelledby="over-title" hidden>
-    <span class="result-kicker" id="result-label">BUGÜNÜN SKORUN</span><div class="result-big"><strong id="result-score">0</strong><span>/5</span></div><h2 id="over-title"></h2>
+    <span class="result-kicker" id="result-label">BUGÜNÜN SKORUN</span><div class="result-big"><strong id="result-score">0</strong><span>/5</span></div><span class="score-title" id="score-title"></span><h2 id="over-title"></h2>
     <p id="over-text"></p>
     <div class="grid-share result-grid" id="over-grid"></div><div class="hardest" id="hardest"><span class="result-kicker">EN ZOR KARŞILAŞMAN</span><strong id="hardest-pair"></strong><p id="hardest-note"></p><small>Değer farkı büyük olan değere bölünerek hesaplanır.</small></div><details class="round-details"><summary>5 karşılaşmanı incele</summary><ol id="round-summary"></ol></details><div class="countdown-box"><span class="result-kicker" id="countdown-label">YARININ SERİSİNE · TSİ 00.00</span><strong id="countdown">00:00:00</strong><span>Yeni coinler, yeni eşleşmeler.</span></div>
     <div class="btns">
@@ -212,7 +241,7 @@ function showStatus(){
 }
 function themeApply(dark){document.documentElement.dataset.theme=dark?'dark':'light';$('logo').querySelector('img').src=assetURL(CONFIG.LOGO_DARK_URL);}
 const systemTheme=matchMedia('(prefers-color-scheme:dark)');
-themeApply(systemTheme.matches);systemTheme.addEventListener?.('change',e=>themeApply(e.matches));
+themeApply(true);
 
 systemTheme.addEventListener('change',e=>{if(readLocal('sbx-hb-theme',null)===null)themeApply(e.matches);});
 const EVENT_FIELDS={game_start:['mode','metric'],guess:['mode','metric','left_coin','right_coin','choice','correct','streak'],game_over:['mode','metric','final_streak','daily_score'],share_click:['mode','score'],coin_cta_click:['coin','position','mode']};
@@ -254,13 +283,14 @@ async function init(){
 }
 
 let wheelAnimations=[];
+const coinColor=s=>(typeof COIN_COLORS==='object'&&COIN_COLORS?.[s])||'#dc0005';
 function cancelSpin(){wheelAnimations.forEach(a=>a.cancel());wheelAnimations=[];}
 function paintWheel(side,coin){
   const symbols=Object.keys(LISTING).filter(s=>!STABLE.includes(s));
   const selected=coin?.s||symbols[side==='left'?12:35];
   const offset=Math.max(0,symbols.indexOf(selected));
   const slots=[selected,...symbols.filter(s=>s!==selected).slice(offset).concat(symbols.filter(s=>s!==selected).slice(0,offset)).slice(0,11)];
-  $('wheel-stage')?.style?.setProperty?.('--coin-'+side,(typeof COIN_COLORS==='object'&&COIN_COLORS?.[selected])||'var(--brand)');
+  $('wheel-stage')?.style?.setProperty?.('--coin-'+side,coinColor(selected));
   $('wheel-'+side).innerHTML=slots.map((symbol,i)=>`<span class="wheel-slot ${i===0?'is-selected':''}" style="--angle:${(side==='right'?180:0)+i*30}deg"><img src="${assetURL('assets/coins/'+symbol.toLowerCase()+'.png')}" alt=""></span>`).join('');
 }
 function prepareSpin(){
@@ -298,7 +328,7 @@ paintWheel('left');paintWheel('right');
 
 function pickNext(exclude,against){let pool=COINS.filter(c=>!exclude.includes(c.s)&&(!against||val(c)!==val(against)));if(!pool.length)pool=COINS.filter(c=>!against||c.s!==against.s);return pool[Math.floor(Math.random()*pool.length)];}
 function tokenHTML(c){return `<div class="token"><img src="${assetURL('assets/coins/'+c.s.toLowerCase()+'.png')}" alt="" width="66" height="66"></div>`;}
-function cardHTML(c,side){const shown=side==='left';return `<span class="card-label">${shown?'Referans coin':'Daha yüksek mi, düşük mü?'}</span>${tokenHTML(c)}
+function cardHTML(c,side){const shown=side==='left';return `<span class="card-label">${shown?'Referans coin':'Tahmin et'}</span>${tokenHTML(c)}
 <h2 class="name">${esc(c.n)}</h2><span class="sym">${esc(c.s)}</span><span class="metric-label">${metricName()} · USD</span>
 <div class="value ${shown?'':'hidden-val'}" id="${side}-val" ${shown?`title="${precise(val(c))}"`:''}>${shown?fmt(val(c)):'? ? ?'}</div>
 ${shown?'<p class="left-note">Diğer coinin değeri bundan daha yüksek mi, daha düşük mü?</p>':`<div class="guesses"><button class="guess hi" data-g="hi">↑ Daha yüksek</button><button class="guess lo" data-g="lo">↓ Daha düşük</button></div>`}
@@ -316,7 +346,7 @@ function layoutAnswers(){const guesses=document.querySelector('.guesses');if(!gu
 mobileLayout.addEventListener('change',layoutAnswers);
 function render(){
   $('answer-bar').replaceChildren();
-  $('left').innerHTML=cardHTML(state.left,'left');$('right').innerHTML=cardHTML(state.right,'right');$('left').className='card';$('right').className='card enter';$('vs').className='vs';$('vs').textContent='VS';
+  $('left').innerHTML=cardHTML(state.left,'left');$('right').innerHTML=cardHTML(state.right,'right');$('left').className='card';$('right').className='card enter';$('left').style?.setProperty?.('--cc',coinColor(state.left.s));$('right').style?.setProperty?.('--cc',coinColor(state.right.s));$('vs').className='vs';$('vs').textContent='VS';
   layoutAnswers();updateProgress();
   document.querySelectorAll('.guess').forEach(b=>b.onclick=()=>guess(b.dataset.g));
   document.querySelectorAll('.cta').forEach(a=>a.onclick=()=>track('coin_cta_click',{coin:a.dataset.coin,position:a.dataset.position,mode:state.mode}));
@@ -335,7 +365,7 @@ async function guess(g){
   else ok=(g==='hi'&&val(state.right)>=val(state.left))||(g==='lo'&&val(state.right)<=val(state.left));
   state.history.push({left:{...state.left},right:{...state.right},choice:g,ok});
   const el=$('right-val');el.classList.remove('hidden-val');el.title=precise(val(state.right));countUp(el,val(state.right));
-  $('right').classList.add(ok?'win':'lose');$('vs').className='vs '+(ok?'ok':'no');$('vs').textContent=ok?'✓':'✕';
+  $('right').classList.add(ok?'win':'lose');try{if(typeof navigator!=='undefined'&&!matchMedia('(prefers-reduced-motion:reduce)').matches)navigator.vibrate?.(ok?25:[30,60,30]);}catch{}$('vs').className='vs '+(ok?'ok':'no');$('vs').textContent=ok?'✓':'✕';
   $('feedback').textContent=(ok?'Doğru tahmin! ':'Bu kez olmadı. ')+`${state.right.s}: ${fmt(val(state.right))} · ${state.left.s}: ${fmt(val(state.left))}`;
   const nextStreak=state.streak+(ok?1:0);
   track('guess',{mode:state.mode,metric:state.metric,left_coin:leftCoin,right_coin:rightCoin,choice:g,correct:ok,streak:nextStreak});
@@ -369,7 +399,7 @@ function gameOver(){
   if(!state.account&&!savedDaily())writeLocal('sbx-first-daily-five',{day:state.day,metric:state.metric,score,results:[...state.dRes],source:state.source});
   state.firstScore=savedDaily();
   $('over-title').textContent=state.practice?'Antrenman tamamlandı.':'Bugünün düellosu tamamlandı.';
-  $('result-score').textContent=score;
+  $('result-score').textContent=score;$('score-title').textContent=scoreTitle(score);if(score===5)celebrate();
   $('result-label').textContent=state.practice?'ANTRENMAN SKORUN':'BUGÜNÜN SKORUN';
   $('over-text').textContent=state.practice?`İlk günlük skorun ${state.firstScore?.score??score}/5 olarak korunuyor.`:state.account?'İlk tamamlanan günlük sonuç hesabında korunur.':'İlk tamamlanan günlük sonuç bu tarayıcıda korunur.';
   $('over-grid').innerHTML=state.dRes.map((ok,i)=>`<span class="result-cell ${ok?'correct':'wrong'}" aria-label="${i+1}. karşılaşma: ${ok?'doğru':'yanlış'}"><small>${i+1}</small>${ok?'✓':'×'}</span>`).join('');
@@ -394,31 +424,47 @@ function shareText(){
   try{const url=new URL(utm(base,state.mode,'share'));url.searchParams.set('mode',state.mode);url.searchParams.set('metric',state.metric);return text+'\n'+url.href;}catch{return text;}
 }
 let shareAsset=null,shareBuild=0,shareFormat='story';
+function scoreTitle(score){return score>=5?'Piyasa Kurdu':score>=3?'Keskin Göz':'Yarın Rövanş';}
 function challengeLine(score,mode){if(mode==='daily')return score===5?'5’te 5. Sıra sende.':score>=3?'Çarkın dilini çözdüm.':'Çark döndü. Sıra sende.';return score===0?'İlk tur ısınmaydı.':score>=10?'Bu seriyi geçebilir misin?':'Çark döndü. Sıra sende.';}
 function loadCardImage(path){return new Promise(resolve=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>resolve(null);img.src=assetURL(path);});}
 async function buildChallengeCard(model){
-  const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=model.format==='feed'?1350:1920;const ctx=canvas.getContext('2d');
+  const W=1080,H=model.format==='feed'?1350:1920;
+  const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');
   if(!ctx)throw Error('Canvas unavailable');
   await Promise.race([document.fonts.ready,new Promise(resolve=>setTimeout(resolve,1800))]);
   const [logo,left,right]=await Promise.all([loadCardImage(CONFIG.LOGO_DARK_URL),loadCardImage('assets/coins/'+model.left.toLowerCase()+'.png'),loadCardImage('assets/coins/'+model.right.toLowerCase()+'.png')]);
-  ctx.fillStyle='#141414';ctx.fillRect(0,0,1080,canvas.height);ctx.save();ctx.translate(0,(canvas.height-1350)/2);
-  ctx.save();ctx.strokeStyle='#343434';ctx.lineWidth=2;for(const x of [-145,1225])for(const radius of [260,310,360]){ctx.beginPath();ctx.arc(x,570,radius,0,Math.PI*2);ctx.stroke();}ctx.restore();
-  const text=(value,x,y,size,color='#fff',weight=700)=>{ctx.fillStyle=color;ctx.font=`${weight} ${size}px "Nunito Sans",sans-serif`;ctx.fillText(value,x,y);};
-  if(logo)ctx.drawImage(logo,70,65,265,265*logo.height/logo.width);else text('STABLEX',70,110,44);
-  text('COİN DÜELLOSU',70,210,30,'#aaa');text(model.practice?"ANTRENMAN":model.mode==='daily'?"GÜNLÜK SERİ":"SONSUZ SERİ",70,258,22,'#fff');
-  text(challengeLine(model.score,model.mode),70,350,model.score>=10?47:48);
-  ctx.textAlign='center';text(String(model.score),540,642,250,'#dc0005');text(model.mode==='daily'?'5 SORUDA DOĞRU':'DOĞRU TAHMİN / SERİ',540,712,27,'#ddd');
-  text(model.metric==='m'?'Piyasa değeri':'24 saatlik hacim',540,762,26,'#aaa',400);
-  const results=model.results.slice(-20),size=32,gap=13,columns=Math.min(results.length,10);const start=(1080-(columns*size+(columns-1)*gap))/2;
-  results.forEach((ok,i)=>{const x=start+(i%10)*(size+gap),y=810+Math.floor(i/10)*45;ctx.fillStyle=ok?'#fff':'#dc0005';ctx.beginPath();ctx.roundRect(x,y,size,size,7);ctx.fill();ctx.strokeStyle='#141414';ctx.lineWidth=3;ctx.beginPath();if(ok){ctx.moveTo(x+8,y+16);ctx.lineTo(x+14,y+22);ctx.lineTo(x+24,y+10);}else{ctx.moveTo(x+10,y+10);ctx.lineTo(x+22,y+22);ctx.moveTo(x+22,y+10);ctx.lineTo(x+10,y+22);}ctx.stroke();});
-  text(model.mode==='endless'&&model.results.length>20?'Son 20 tahmin':'',540,926,20,'#aaa',400);
-  ctx.strokeStyle='#494949';ctx.setLineDash([8,10]);ctx.beginPath();ctx.moveTo(70,958);ctx.lineTo(1010,958);ctx.stroke();ctx.setLineDash([]);
-  text(model.hardest?'EN YAKIN DÜELLO':'SON KARŞILAŞMA',540,1004,20,'#aaa');
-  for(const [img,symbol,x] of [[left,model.left,350],[right,model.right,730]]){if(img){ctx.save();ctx.beginPath();ctx.arc(x-55,1064,30,0,Math.PI*2);ctx.clip();ctx.drawImage(img,x-85,1034,60,60);ctx.restore();}ctx.textAlign='left';text(symbol,x-10,1076,32);ctx.textAlign='center';}
-  text('VS',540,1074,22,'#fff');text('Ben çevirdim. Şimdi sen çevir.',540,1165,33);
-  text(model.day+(model.source==='demo'?'  ·  Veri '+DATA_DATE:''),540,1220,22,'#aaa',400);
-  text('Eğlence amaçlıdır. Yatırım tavsiyesi değildir.',540,1280,20,'#aaa',400);ctx.textAlign='left';ctx.restore();
-  canvas.setAttribute('aria-label',`${challengeLine(model.score,model.mode)} ${model.score}${model.mode==='daily'?'/5':' doğru seri'}. ${model.results.filter(Boolean).length} doğru. ${model.practice?'Antrenman. ':''}${model.hardest?'En yakın düello':'Son karşılaşma'} ${model.left} ve ${model.right}.${model.source==='demo'?' Veriler '+DATA_DATE+' tarihli.':''}`);
+  const RED='#dc0005',title=model.mode==='daily'?scoreTitle(model.score):'';
+  // Zemin: koyu Stablex yüzeyi, ortada kırmızı ışıma, kenarlarda yarım çarklar
+  ctx.fillStyle='#0d0d0d';ctx.fillRect(0,0,W,H);
+  const top=(H-1350)/2;
+  const glow=ctx.createRadialGradient(540,top+470,40,540,top+470,720);glow.addColorStop(0,'rgba(220,0,5,.30)');glow.addColorStop(1,'rgba(220,0,5,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.strokeStyle='#262626';ctx.lineWidth=2;for(const x of [-170,1250])for(const r of [240,300,360]){ctx.beginPath();ctx.arc(x,top+520,r,0,Math.PI*2);ctx.stroke();}ctx.restore();
+  const text=(value,x,y,size,color='#fff',weight=700,align='center')=>{ctx.textAlign=align;ctx.fillStyle=color;ctx.font=`${weight} ${size}px "Nunito Sans",sans-serif`;ctx.fillText(value,x,y);};
+  const spaced=(v,px)=>{try{ctx.letterSpacing=px+'px';}catch{}return v;};
+  // Üst bant
+  if(logo)ctx.drawImage(logo,70,70,250,250*logo.height/logo.width);else text('STABLEX',70,115,46,'#fff',900,'left');
+  spaced('',3);text('COİN DÜELLOSU',1010,108,24,'#9a9a9a',800,'right');spaced('',0);
+  ctx.save();ctx.translate(0,top);
+  const date=model.day.split('-').reverse().join('.');
+  spaced('',4);text(model.practice?'ANTRENMAN':model.mode==='daily'?`GÜNLÜK SERİ · ${date}`:'SONSUZ SERİ',540,250,26,'#bdbdbd',800);spaced('',0);
+  // Büyük skor
+  ctx.font='900 330px "Nunito Sans",sans-serif';const w1=ctx.measureText(String(model.score)).width;ctx.font='800 120px "Nunito Sans",sans-serif';const w2=model.mode==='daily'?ctx.measureText('/5').width:0;
+  const x0=540-(w1+w2+10)/2;text(String(model.score),x0,560,330,RED,900,'left');if(w2)text('/5',x0+w1+10,560,120,'#8a8a8a',800,'left');
+  // Ünvan rozeti
+  if(title){ctx.font='900 46px "Nunito Sans",sans-serif';spaced('',5);const tw=ctx.measureText(title.toLocaleUpperCase('tr-TR')).width+90;ctx.fillStyle='rgba(220,0,5,.16)';ctx.strokeStyle=RED;ctx.lineWidth=3;ctx.beginPath();ctx.roundRect(540-tw/2,598,tw,84,42);ctx.fill();ctx.stroke();text(title.toLocaleUpperCase('tr-TR'),540,656,46,'#fff',900);spaced('',0);}
+  // Sonuç izi
+  const res=model.results.slice(-10),sz=res.length>5?70:92,gap=res.length>5?16:24,rw=res.length*sz+(res.length-1)*gap,rx=540-rw/2;
+  res.forEach((ok,i)=>{const x=rx+i*(sz+gap),y=730;ctx.fillStyle=ok?'#ffffff':RED;ctx.beginPath();ctx.roundRect(x,y,sz,sz,16);ctx.fill();ctx.strokeStyle=ok?'#141414':'#ffffff';ctx.lineWidth=7;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();const c=sz/2;if(ok){ctx.moveTo(x+c-18,y+c+1);ctx.lineTo(x+c-5,y+c+14);ctx.lineTo(x+c+19,y+c-13);}else{ctx.moveTo(x+c-14,y+c-14);ctx.lineTo(x+c+14,y+c+14);ctx.moveTo(x+c+14,y+c-14);ctx.lineTo(x+c-14,y+c+14);}ctx.stroke();});
+  ctx.strokeStyle='#2e2e2e';ctx.lineWidth=2;ctx.setLineDash([10,12]);ctx.beginPath();ctx.moveTo(90,880);ctx.lineTo(990,880);ctx.stroke();ctx.setLineDash([]);
+  // En yakın düello: coin renginde halkalar
+  spaced('',4);text(model.hardest?'EN YAKIN DÜELLO':'SON KARŞILAŞMA',540,925,24,'#9a9a9a',800);spaced('',0);
+  for(const [img,sym,x] of [[left,model.left,330],[right,model.right,750]]){const cy=1005;ctx.beginPath();ctx.arc(x,cy,70,0,Math.PI*2);ctx.fillStyle='#171717';ctx.fill();ctx.lineWidth=7;ctx.strokeStyle=coinColor(sym);ctx.stroke();if(img){ctx.save();ctx.beginPath();ctx.arc(x,cy,58,0,Math.PI*2);ctx.clip();ctx.drawImage(img,x-58,cy-58,116,116);ctx.restore();}else text(sym,x,cy+12,32);text(sym,x,cy+122,36,'#fff',800);}
+  ctx.beginPath();ctx.arc(540,1005,36,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();text('VS',540,1016,26,'#141414',900);
+  text(model.mode==='daily'?'Sen kaç yaparsın?':challengeLine(model.score,model.mode),540,1218,50,'#fff',900);
+  text('stablex.com.tr',540,1270,30,'#ff676b',800);
+  text(`${date}${model.source==='demo'&&DATA_DATE!==date?' · Veri '+DATA_DATE:''} · Eğlence amaçlıdır, yatırım tavsiyesi değildir.`,540,1322,19,'#7a7a7a',400);
+  ctx.restore();ctx.textAlign='left';
+  canvas.setAttribute('aria-label',`${title?title+'. ':''}${model.score}${model.mode==='daily'?'/5':' doğru seri'}. ${model.results.filter(Boolean).length} doğru. ${model.practice?'Antrenman. ':''}${model.hardest?'En yakın düello':'Son karşılaşma'} ${model.left} ve ${model.right}.${model.source==='demo'?' Veriler '+DATA_DATE+' tarihli.':''}`);
   return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve({blob,canvas}):reject(Error('PNG unavailable')),'image/png'));
 }
 async function openChallenge(){
@@ -478,6 +524,15 @@ $('k-mcap').onclick=e=>selectMetric('m',e.currentTarget);$('k-vol').onclick=e=>s
 // A single public experience: Daily Series, market capitalization.
 state.mode='daily';state.metric='m';
 seg([$('m-endless'),$('m-daily')],$('m-daily'));seg([$('k-mcap'),$('k-vol')],$('k-mcap'));
+function celebrate(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const c=document.createElement('canvas'),ctx=c.getContext('2d');if(!ctx)return;
+  c.className='confetti';c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;document.body.append(c);ctx.scale(devicePixelRatio,devicePixelRatio);
+  const colors=['#dc0005','#ff676b','#ffffff','#f5f5f5','#ff2a2f'],parts=Array.from({length:140},()=>({x:innerWidth/2+(Math.random()-.5)*120,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*13-5,r:Math.random()*6+4,a:Math.random()*6,va:(Math.random()-.5)*.4,c:colors[Math.floor(Math.random()*colors.length)]}));
+  const t0=performance.now();
+  const step=t=>{const e=t-t0;ctx.clearRect(0,0,innerWidth,innerHeight);ctx.globalAlpha=Math.max(0,1-Math.max(0,e-1300)/600);for(const p of parts){p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillStyle=p.c;ctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);ctx.restore();}if(e<1900)requestAnimationFrame(step);else c.remove();};
+  requestAnimationFrame(step);
+}
 init();
 
 </script>
