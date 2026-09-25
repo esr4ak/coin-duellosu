@@ -189,6 +189,19 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 .tier-track .tier.current b,.tier-track .tier.current small{color:#fff;opacity:1}
 .tier-track .tier i{position:absolute;left:0;bottom:0;height:3px;background:#fff;border-radius:0 0 0 10px;opacity:.9}
 @media(max-width:360px){.tier-track .tier b{font-size:12px}.tier-track .tier small{font-size:8.5px}}
+
+.kyc-path{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.kyc-step{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink);background:var(--muted);border:1px solid var(--line);border-radius:99px;padding:5px 10px 5px 5px}
+.kyc-step b{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px}
+.kyc-cta{display:inline-flex!important;align-items:center;justify-content:center;text-decoration:none;min-height:40px!important;padding:8px 16px!important;font-size:13px!important;width:auto!important}
+.kyc-path .kyc-cta{margin-left:auto}
+.kyc-path[hidden],.kyc-cta[hidden]{display:none!important}
+.demo-switch{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px;color:var(--ink-2);border-top:1px dashed var(--line);padding-top:10px}
+.demo-switch span{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:9.5px;margin-right:4px}
+.demo-switch button{font:700 12px var(--body);color:var(--ink-2);background:transparent;border:1px solid var(--line);border-radius:99px;padding:5px 12px;cursor:pointer}
+.demo-switch button[aria-pressed='true']{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.pool-result .kyc-cta{margin-top:6px}
+@media(max-width:600px){.kyc-path .kyc-cta{margin-left:0;width:100%!important}}
 </style>
 </head>
 <body>
