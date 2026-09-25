@@ -229,6 +229,9 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 .join-form input[type=email],.join-form input:not([type]){width:100%;box-sizing:border-box;min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--ground);color:var(--ink);padding:0 12px;font:15px var(--body)}
 .join-check{display:flex!important;gap:8px;align-items:flex-start;font-weight:600!important;color:var(--ink-2)!important;line-height:1.4}.join-check small{display:block;color:var(--ink-2)}
 .join-error{margin:0;color:var(--down);font-size:12px;min-height:16px}
+
+.camp-dates{font-size:12px!important;color:var(--ink-2);margin:4px 0 0}.camp-dates b{color:var(--ink)}
+.join-check a{color:var(--ink);text-decoration:underline}
 </style>
 </head>
 <body>
@@ -548,7 +551,7 @@ function poolInfo(){return null;}
 function shareText(){
   const source=state.source==='demo'?' · Veri '+DATA_DATE:'';
   const text=state.mode==='daily'?`Stablex · Coin Düellosu ${state.day}\n${metricName()}${source}${state.practice?' · Antrenman':''}\n${state.dRes.map(r=>r?'🟩':'🟥').join('')} ${state.dRes.filter(Boolean).length}/5`:`Stablex · Coin Düellosu\n${metricName()}${source}\n${state.streak} seri yaptım. Rekorumu geçebilir misin?`;
-  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nOrtak havuz ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL · tavana birlikte ulaşalım`:'';
+  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nOrtak havuz ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL · tavana birlikte ulaşalım\nReklam · Stablex kampanyası`:'';
   let base=runtime.gameURL; if(!base&&/^https?:$/.test(location.protocol)&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname))base=location.origin+location.pathname;
   if(!base)return text+poolLine+'\n(Yerel önizleme — oyun bağlantısı yayında eklenecek.)';
   try{return text+poolLine+'\n'+new URL(base).href;}catch{return text+poolLine;}
@@ -573,7 +576,7 @@ async function buildChallengeCard(model){
   const spaced=(v,px)=>{try{ctx.letterSpacing=px+'px';}catch{}return v;};
   // Üst bant
   if(logo)ctx.drawImage(logo,70,70,250,250*logo.height/logo.width);else text('STABLEX',70,115,46,'#fff',900,'left');
-  spaced('',3);text('COİN DÜELLOSU',1010,108,24,'#9a9a9a',800,'right');spaced('',0);
+  const isCamp=typeof poolInfo==='function'&&!!poolInfo();if(isCamp){ctx.font='800 22px "Nunito Sans",sans-serif';spaced('',3);const lw=ctx.measureText('REKLAM · STABLEX KAMPANYASI').width+36;ctx.fillStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.roundRect(1010-lw,78,lw,46,23);ctx.fill();text('REKLAM · STABLEX KAMPANYASI',1010-18,109,22,'#ffffff',800,'right');spaced('',0);}else{spaced('',3);text('COİN DÜELLOSU',1010,108,24,'#9a9a9a',800,'right');spaced('',0);}
   ctx.save();ctx.translate(0,top);
   const date=model.day.split('-').reverse().join('.');
   spaced('',4);text(model.practice?'ANTRENMAN':model.mode==='daily'?`GÜNLÜK SERİ · ${date}`:'SONSUZ SERİ',540,250,26,'#bdbdbd',800);spaced('',0);
@@ -592,7 +595,7 @@ async function buildChallengeCard(model){
   ctx.beginPath();ctx.arc(540,1005,36,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();text('VS',540,1016,26,'#141414',900);
   text(model.mode==='daily'?'Sen kaç yaparsın?':challengeLine(model.score,model.mode),540,1218,50,'#fff',900);
   const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Ortak havuz ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
-  text(`${date}${model.source==='demo'&&DATA_DATE!==date?' · Veri '+DATA_DATE:''} · Eğlence amaçlıdır, yatırım tavsiyesi değildir.`,540,1322,19,'#7a7a7a',400);
+  text(`${pool?'Reklam · Stablex kampanyası · ':''}${date}${model.source==='demo'&&DATA_DATE!==date?' · Veri '+DATA_DATE:''} · Eğlence amaçlıdır, yatırım tavsiyesi değildir.`,540,1322,pool?17:19,'#7a7a7a',400);
   ctx.restore();ctx.textAlign='left';
   canvas.setAttribute('aria-label',`${title?title+'. ':''}${model.score}${model.mode==='daily'?'/5':' doğru seri'}. ${model.results.filter(Boolean).length} doğru. ${model.practice?'Antrenman. ':''}${model.hardest?'En yakın düello':'Son karşılaşma'} ${model.left} ve ${model.right}.${model.source==='demo'?' Veriler '+DATA_DATE+' tarihli.':''}`);
   return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve({blob,canvas}):reject(Error('PNG unavailable')),'image/png'));
