@@ -178,6 +178,17 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 .pool-bar{width:100%;display:block}
 .reward-dialog .reward-amount small{display:block;font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:0;margin-top:4px}
 @media(max-width:600px){#pool-amount{font-size:34px}.pool-ticket{padding:18px!important}}
+
+.tier-track{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.tier-track .tier{position:relative;border-radius:10px;padding:8px 6px 7px;background:var(--muted);border:1px solid var(--line);text-align:center}
+.tier-track .tier b{display:block;font-size:14px;font-weight:900;letter-spacing:-.02em;color:var(--ink-2)}
+.tier-track .tier small{display:block;font-size:9.5px;font-weight:700;color:var(--ink-2);opacity:.8;letter-spacing:.02em}
+.tier-track .tier.done{background:color-mix(in srgb,var(--brand) 22%,var(--surface));border-color:color-mix(in srgb,var(--brand) 55%,var(--line))}
+.tier-track .tier.done b{color:var(--ink)}
+.tier-track .tier.current{background:var(--brand);border-color:var(--brand);box-shadow:0 6px 20px color-mix(in srgb,var(--brand) 35%,transparent)}
+.tier-track .tier.current b,.tier-track .tier.current small{color:#fff;opacity:1}
+.tier-track .tier i{position:absolute;left:0;bottom:0;height:3px;background:#fff;border-radius:0 0 0 10px;opacity:.9}
+@media(max-width:360px){.tier-track .tier b{font-size:12px}.tier-track .tier small{font-size:8.5px}}
 </style>
 </head>
 <body>
@@ -497,7 +508,7 @@ function poolInfo(){return null;}
 function shareText(){
   const source=state.source==='demo'?' · Veri '+DATA_DATE:'';
   const text=state.mode==='daily'?`Stablex · Coin Düellosu ${state.day}\n${metricName()}${source}${state.practice?' · Antrenman':''}\n${state.dRes.map(r=>r?'🟩':'🟥').join('')} ${state.dRes.filter(Boolean).length}/5`:`Stablex · Coin Düellosu\n${metricName()}${source}\n${state.streak} seri yaptım. Rekorumu geçebilir misin?`;
-  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nTopluluk havuzunu birlikte büyütüyoruz: ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL`:'';
+  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nBugünkü topluluk ödülü: ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL · katılım arttıkça yükselir`:'';
   let base=runtime.gameURL; if(!base&&/^https?:$/.test(location.protocol)&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname))base=location.origin+location.pathname;
   if(!base)return text+poolLine+'\n(Yerel önizleme — oyun bağlantısı yayında eklenecek.)';
   try{return text+poolLine+'\n'+new URL(base).href;}catch{return text+poolLine;}
@@ -540,7 +551,7 @@ async function buildChallengeCard(model){
   for(const [img,sym,x] of [[left,model.left,330],[right,model.right,750]]){const cy=1005;ctx.beginPath();ctx.arc(x,cy,70,0,Math.PI*2);ctx.fillStyle='#171717';ctx.fill();ctx.lineWidth=7;ctx.strokeStyle=coinColor(sym);ctx.stroke();if(img){ctx.save();ctx.beginPath();ctx.arc(x,cy,58,0,Math.PI*2);ctx.clip();ctx.drawImage(img,x-58,cy-58,116,116);ctx.restore();}else text(sym,x,cy+12,32);text(sym,x,cy+122,36,'#fff',800);}
   ctx.beginPath();ctx.arc(540,1005,36,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();text('VS',540,1016,26,'#141414',900);
   text(model.mode==='daily'?'Sen kaç yaparsın?':challengeLine(model.score,model.mode),540,1218,50,'#fff',900);
-  const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Topluluk havuzu ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
+  const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Bugünkü topluluk ödülü ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
   text(`${date}${model.source==='demo'&&DATA_DATE!==date?' · Veri '+DATA_DATE:''} · Eğlence amaçlıdır, yatırım tavsiyesi değildir.`,540,1322,19,'#7a7a7a',400);
   ctx.restore();ctx.textAlign='left';
   canvas.setAttribute('aria-label',`${title?title+'. ':''}${model.score}${model.mode==='daily'?'/5':' doğru seri'}. ${model.results.filter(Boolean).length} doğru. ${model.practice?'Antrenman. ':''}${model.hardest?'En yakın düello':'Son karşılaşma'} ${model.left} ve ${model.right}.${model.source==='demo'?' Veriler '+DATA_DATE+' tarihli.':''}`);
