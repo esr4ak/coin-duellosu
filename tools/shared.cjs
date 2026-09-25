@@ -46,7 +46,7 @@ function dailyMatches(day,coins=FALLBACK,seed=0){
 function nextSeriesAt(day){return Date.parse(day+'T00:00:00+03:00')+86400000;}
 function hardestRound(rounds){return rounds.reduce((best,row)=>{const gap=Math.abs(row.left.m-row.right.m)/Math.max(row.left.m,row.right.m);return !best||gap<best.gap?{...row,gap}:best;},null);}
 function utm(url,mode,content){const u=new URL(url);u.searchParams.set('utm_source','game');u.searchParams.set('utm_medium','hangisi_buyuk');u.searchParams.set('utm_campaign',mode);u.searchParams.set('utm_content',content);return u.href;}
-function coinURL(symbol,mode){if(!LISTING[symbol])throw Error('Unknown coin');return utm('https://stablex.com.tr/piyasalar/'+symbol.toLowerCase()+'try',mode,symbol);}
+function coinURL(symbol,mode){if(!LISTING[symbol])throw Error('Unknown coin');return 'https://stablex.com.tr/piyasalar/'+symbol.toLowerCase()+'try';}
 function normalizeMarkets(rows){if(!Array.isArray(rows))throw Error('Invalid market data');const byId=new Map(rows.map(r=>[r.id,r]));return Object.entries(LISTING).flatMap(([s,id])=>{const r=byId.get(id);if(!r||String(r.symbol).toUpperCase()!==s||typeof r.market_cap!=='number'||!Number.isFinite(r.market_cap)||r.market_cap<=0||typeof r.total_volume!=='number'||!Number.isFinite(r.total_volume)||r.total_volume<0)return [];return [{s,n:String(r.name).slice(0,100),m:r.market_cap/1e9,v:r.total_volume/1e9,img:'assets/coins/'+s.toLowerCase()+'.png'}];}).sort((a,b)=>a.s<b.s?-1:1);}
 return {COIN_COLORS,LISTING,STABLE,FALLBACK,DATA_DATE,DAILY_SYMBOLS,VERSION,dayKey,rnd,dailyPool,dailySymbols,dailyMatches,nextSeriesAt,hardestRound,utm,coinURL,normalizeMarkets};
 });
