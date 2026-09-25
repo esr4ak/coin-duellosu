@@ -209,6 +209,26 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 .kyc-dialog p{font-size:14px;color:var(--ink-2)}
 .kyc-dialog .share-actions{display:flex;flex-direction:column;gap:8px}
 .kyc-dialog .kyc-cta{width:100%!important;min-height:48px!important}
+
+.pool-per{margin:0;font-size:13px;color:var(--ink-2)}.pool-per b{color:var(--ink);font-weight:900}
+.lb{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--surface) 70%,transparent)}
+.lb-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.lb-head span{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--brand)}.lb-head small{font-size:11px;color:var(--ink-2)}
+.lb-list{list-style:none;margin:0;padding:4px 0}
+.lb-row{display:grid;grid-template-columns:34px 1fr auto auto;gap:10px;align-items:center;padding:7px 14px;font-size:13px}
+.lb-row .r{font-weight:900;color:var(--ink-2)}.lb-row:nth-child(-n+3) .r{color:var(--brand)}
+.lb-row .n{font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-row .d,.lb-row .c{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}.lb-row .d b{color:var(--ink)}
+.lb-me .lb-row{background:color-mix(in srgb,var(--brand) 18%,transparent);border-top:1px dashed var(--line)}
+.lb-me .lb-row .n{color:#fff}
+.pool-check{display:flex;flex-wrap:wrap;gap:8px}
+.pool-check span{font-size:12px;font-weight:700;border-radius:99px;padding:5px 11px;border:1px solid var(--line);color:var(--ink-2)}
+.pool-check span.ok{border-color:color-mix(in srgb,var(--up) 60%,var(--line));color:var(--ink)}
+.pool-check span.ok:before{content:'✓ ';color:var(--up)}.pool-check span.no:before{content:'○ ';color:var(--ink-2)}
+.join-form{display:grid;gap:8px}.join-form label{font-size:12px;font-weight:700;color:var(--ink)}
+.join-form input[type=email],.join-form input:not([type]){width:100%;box-sizing:border-box;min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--ground);color:var(--ink);padding:0 12px;font:15px var(--body)}
+.join-check{display:flex!important;gap:8px;align-items:flex-start;font-weight:600!important;color:var(--ink-2)!important;line-height:1.4}.join-check small{display:block;color:var(--ink-2)}
+.join-error{margin:0;color:var(--down);font-size:12px;min-height:16px}
 </style>
 </head>
 <body>
@@ -433,7 +453,7 @@ async function spinPair(generation){
   $('feedback').textContent='Coinler hazır. Sağdaki daha yüksek mi, daha düşük mü?';
   document.querySelector('.guess').focus({preventScroll:true});ensureAnswersVisible();
 }
-$('spin').onclick=()=>{if($('spin').disabled)return;if(typeof requireKyc==='function'&&!requireKyc())return;$('spin').disabled=true;start();};
+$('spin').onclick=()=>{if($('spin').disabled)return;if(typeof requireJoin==='function'&&!requireJoin())return;$('spin').disabled=true;start();};
 paintWheel('left');paintWheel('right');
 
 function pickNext(exclude,against){let pool=COINS.filter(c=>!exclude.includes(c.s)&&(!against||val(c)!==val(against)));if(!pool.length)pool=COINS.filter(c=>!against||c.s!==against.s);return pool[Math.floor(Math.random()*pool.length)];}
@@ -528,7 +548,7 @@ function poolInfo(){return null;}
 function shareText(){
   const source=state.source==='demo'?' · Veri '+DATA_DATE:'';
   const text=state.mode==='daily'?`Stablex · Coin Düellosu ${state.day}\n${metricName()}${source}${state.practice?' · Antrenman':''}\n${state.dRes.map(r=>r?'🟩':'🟥').join('')} ${state.dRes.filter(Boolean).length}/5`:`Stablex · Coin Düellosu\n${metricName()}${source}\n${state.streak} seri yaptım. Rekorumu geçebilir misin?`;
-  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nBugünkü topluluk ödülü: ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL · katılım arttıkça yükselir`:'';
+  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nOrtak havuz ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL · tavana birlikte ulaşalım`:'';
   let base=runtime.gameURL; if(!base&&/^https?:$/.test(location.protocol)&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname))base=location.origin+location.pathname;
   if(!base)return text+poolLine+'\n(Yerel önizleme — oyun bağlantısı yayında eklenecek.)';
   try{return text+poolLine+'\n'+new URL(base).href;}catch{return text+poolLine;}
@@ -571,14 +591,14 @@ async function buildChallengeCard(model){
   for(const [img,sym,x] of [[left,model.left,330],[right,model.right,750]]){const cy=1005;ctx.beginPath();ctx.arc(x,cy,70,0,Math.PI*2);ctx.fillStyle='#171717';ctx.fill();ctx.lineWidth=7;ctx.strokeStyle=coinColor(sym);ctx.stroke();if(img){ctx.save();ctx.beginPath();ctx.arc(x,cy,58,0,Math.PI*2);ctx.clip();ctx.drawImage(img,x-58,cy-58,116,116);ctx.restore();}else text(sym,x,cy+12,32);text(sym,x,cy+122,36,'#fff',800);}
   ctx.beginPath();ctx.arc(540,1005,36,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();text('VS',540,1016,26,'#141414',900);
   text(model.mode==='daily'?'Sen kaç yaparsın?':challengeLine(model.score,model.mode),540,1218,50,'#fff',900);
-  const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Bugünkü topluluk ödülü ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
+  const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Ortak havuz ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
   text(`${date}${model.source==='demo'&&DATA_DATE!==date?' · Veri '+DATA_DATE:''} · Eğlence amaçlıdır, yatırım tavsiyesi değildir.`,540,1322,19,'#7a7a7a',400);
   ctx.restore();ctx.textAlign='left';
   canvas.setAttribute('aria-label',`${title?title+'. ':''}${model.score}${model.mode==='daily'?'/5':' doğru seri'}. ${model.results.filter(Boolean).length} doğru. ${model.practice?'Antrenman. ':''}${model.hardest?'En yakın düello':'Son karşılaşma'} ${model.left} ve ${model.right}.${model.source==='demo'?' Veriler '+DATA_DATE+' tarihli.':''}`);
   return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve({blob,canvas}):reject(Error('PNG unavailable')),'image/png'));
 }
 async function openChallenge(){
-  if(!state.complete)return;
+  if(!state.complete)return;if(typeof markShared==='function')markShared();
   const generation=++shareBuild;shareAsset=null;
   $('dialog-share-text').hidden=true;$('share-status').textContent='Sonuç kartın hazırlanıyor…';$('native-share').disabled=true;$('save-card').disabled=true;$('native-share').textContent='Kart hazırlanıyor…';
   const preview=$('challenge-card').getContext('2d');if(preview){preview.fillStyle='#141414';preview.fillRect(0,0,1080,1350);}$('challenge-card').setAttribute('aria-label','Sonuç kartı hazırlanıyor');

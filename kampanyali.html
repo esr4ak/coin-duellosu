@@ -210,6 +210,26 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 .kyc-dialog p{font-size:14px;color:var(--ink-2)}
 .kyc-dialog .share-actions{display:flex;flex-direction:column;gap:8px}
 .kyc-dialog .kyc-cta{width:100%!important;min-height:48px!important}
+
+.pool-per{margin:0;font-size:13px;color:var(--ink-2)}.pool-per b{color:var(--ink);font-weight:900}
+.lb{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--surface) 70%,transparent)}
+.lb-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.lb-head span{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--brand)}.lb-head small{font-size:11px;color:var(--ink-2)}
+.lb-list{list-style:none;margin:0;padding:4px 0}
+.lb-row{display:grid;grid-template-columns:34px 1fr auto auto;gap:10px;align-items:center;padding:7px 14px;font-size:13px}
+.lb-row .r{font-weight:900;color:var(--ink-2)}.lb-row:nth-child(-n+3) .r{color:var(--brand)}
+.lb-row .n{font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-row .d,.lb-row .c{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}.lb-row .d b{color:var(--ink)}
+.lb-me .lb-row{background:color-mix(in srgb,var(--brand) 18%,transparent);border-top:1px dashed var(--line)}
+.lb-me .lb-row .n{color:#fff}
+.pool-check{display:flex;flex-wrap:wrap;gap:8px}
+.pool-check span{font-size:12px;font-weight:700;border-radius:99px;padding:5px 11px;border:1px solid var(--line);color:var(--ink-2)}
+.pool-check span.ok{border-color:color-mix(in srgb,var(--up) 60%,var(--line));color:var(--ink)}
+.pool-check span.ok:before{content:'✓ ';color:var(--up)}.pool-check span.no:before{content:'○ ';color:var(--ink-2)}
+.join-form{display:grid;gap:8px}.join-form label{font-size:12px;font-weight:700;color:var(--ink)}
+.join-form input[type=email],.join-form input:not([type]){width:100%;box-sizing:border-box;min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--ground);color:var(--ink);padding:0 12px;font:15px var(--body)}
+.join-check{display:flex!important;gap:8px;align-items:flex-start;font-weight:600!important;color:var(--ink-2)!important;line-height:1.4}.join-check small{display:block;color:var(--ink-2)}
+.join-error{margin:0;color:var(--down);font-size:12px;min-height:16px}
 </style>
 </head>
 <body>
@@ -253,7 +273,7 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
     <span class="result-kicker" id="result-label">BUGÜNÜN SKORUN</span><div class="result-big"><strong id="result-score">0</strong><span>/5</span></div><span class="score-title" id="score-title"></span><h2 id="over-title"></h2>
     <p id="over-text"></p>
     <div class="grid-share result-grid" id="over-grid"></div><div class="hardest" id="hardest"><span class="result-kicker">EN ZOR KARŞILAŞMAN</span><strong id="hardest-pair"></strong><p id="hardest-note"></p><small>Değer farkı büyük olan değere bölünerek hesaplanır.</small></div><details class="round-details"><summary>5 karşılaşmanı incele</summary><ol id="round-summary"></ol></details><div class="countdown-box"><span class="result-kicker" id="countdown-label">YARININ SERİSİNE · TSİ 00.00</span><strong id="countdown">00:00:00</strong><span>Yeni coinler, yeni eşleşmeler.</span></div>
-    <div id="prize-result" class="hardest pool-result" hidden><span class="result-kicker">TOPLULUK ÖDÜLÜ · ÖNİZLEME</span><strong id="prize-title"></strong><p id="prize-note"></p><a class="btn primary kyc-cta" id="prize-kyc" href="https://stablex.com.tr" target="_blank" rel="noopener noreferrer" hidden>Hesabını doğrula ↗</a></div>
+    <div id="prize-result" class="hardest pool-result" hidden><span class="result-kicker">ORTAK HAVUZ · ÖNİZLEME</span><strong id="prize-title"></strong><p id="prize-note"></p><button class="btn primary kyc-cta" id="prize-share" hidden>Sonucunu paylaş · katılım şartı</button></div>
     <div class="btns">
       <button class="btn" id="again">Tekrar oyna</button>
       <button class="btn primary" id="share">Sonucunu paylaş ↗</button>
@@ -261,7 +281,7 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
     <span class="toast" id="toast" role="status" hidden>Kopyalandı</span><textarea id="share-fallback" class="share-fallback" aria-label="Paylaşım metni" readonly hidden></textarea>
   </section>
 
-<section class="reward-ticket pool-ticket" id="reward-ticket" aria-labelledby="reward-heading"><div class="pool-top"><span class="reward-kicker">Topluluk Ödülü · Önizleme</span><button class="btn pool-rules" id="reward-details">Kurallar</button></div><h2 id="reward-heading"><span id="pool-amount">150 TL</span><small id="pool-cap">bugün 5/5 yapan kişi başına</small></h2><div class="tier-track" id="pool-tiers" aria-hidden="true"></div><p id="pool-games">Katılım arttıkça ödül herkes için yükselir.</p><div class="pool-me"><span>Bugün senin durumun</span><strong id="reward-status">Henüz oynamadın</strong></div><div class="kyc-path" id="kyc-path"><span class="kyc-step"><b>1</b>Hesap aç</span><span class="kyc-step"><b>2</b>Kimliğini doğrula</span><span class="kyc-step"><b>3</b>Günün serisinde 5/5</span><a class="btn primary kyc-cta" href="https://stablex.com.tr" target="_blank" rel="noopener noreferrer">Hesabını doğrula ↗</a></div><div class="demo-switch" role="group" aria-label="Önizleme görünümü"><span>Önizleme görünümü</span><button id="demo-guest" aria-pressed="true">Misafir</button><button id="demo-kyc" aria-pressed="false">Doğrulanmış hesap</button></div><p class="pool-note">Ödül seviyesi günün katılımına göre 150 TL'den başlar, en fazla 750 TL olur ve 00.00'da kesinleşir. Her hesap kampanya boyunca bir kez ödül alır. Rakamlar örnektir, kampanya aktif değildir. Yatırım tavsiyesi değildir; kripto varlıklar yüksek risk içerir.</p></section>
+<section class="reward-ticket pool-ticket" id="reward-ticket" aria-labelledby="reward-heading"><div class="pool-top"><span class="reward-kicker">Ortak Havuz · Önizleme</span><button class="btn pool-rules" id="reward-details">Kurallar</button></div><h2 id="reward-heading"><span id="pool-amount">0 TL</span><small id="pool-cap">/ 150.000 TL tavan</small></h2><div class="pool-bar" aria-hidden="true"><i id="pool-fill"></i><span class="pool-ticks"></span></div><p id="pool-games"></p><p class="pool-per" id="pool-per"></p><div class="lb"><div class="lb-head"><span>En istikrarlı oyuncular</span><small id="lb-meta"></small></div><ol class="lb-list" id="lb-list"></ol><div class="lb-me" id="lb-me"></div></div><div class="pool-check" id="pool-check"></div><p class="pool-note">Havuz tüm oyuncuların katılımıyla büyür; kampanya sonunda sıralamadaki ilk 200 oyuncu havuzu eşit paylaşır. Sıralama ve rakamlar örnektir, kampanya aktif değildir. Yatırım tavsiyesi değildir; kripto varlıklar yüksek risk içerir.</p></section>
   <div class="info"><details><summary>Nasıl oynanır?</summary><p>Döndür butonuyla çarkları çevir. Her tahminden sonra oyun devam ediyorsa sıradaki çift otomatik gelir. İlk turda iki çark döner. Sonraki turlarda önceki sağ coin sola geçer ve yalnızca sağ çark döner. İlk coinin değeri açık. Diğer coinin piyasa değeri daha yüksek mi, daha düşük mü, tahmin et. Yanlış yanıt versen de 5 karşılaşmayı tamamlarsın. Eşitlikte iki yanıt da doğru kabul edilir.</p><p>Piyasa değeri, dolaşımdaki arz ile birim fiyatın çarpımıdır; tek bir coinin fiyatı değildir. ABD dolarıyla gösterilir. Canlı günlük havuz, Stablex’te listelenen uygun coinlerin piyasa değeri en yüksek 24 tanesinden oluşur. Türkiye saatiyle her yeni günün ilk oyununda veriler sabitlenir; herkes aynı 6 coinle, farklı eşleşme sıralarında 5 karşılaşma oynar. Çevrimdışıyken örnek havuz kullanılır.</p><p>USDT, USDC ve altına endeksli PAXG/XAUT oyun dışında tutulur.</p></details><span class="account-note" id="account-note">Her gün yeni eşleşmeler.</span></div>
   <p class="disclaimer">Eğlence amaçlıdır, yatırım tavsiyesi değildir. Yalnızca Stablex’te listelenen coinler. Canlı veri alınamadığında tarihli sabit piyasa değerleri kullanılır.</p>
 </div>
@@ -274,8 +294,8 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 <p class="share-help">Instagram için görseli indir; Hikâye veya Gönderi oluştururken galerinden seç. Diğer uygulamalar için paylaşım menüsünü kullan. Paylaşmak tamamen isteğe bağlıdır.</p><p id="share-status" class="share-status" role="status"></p>
 <textarea id="dialog-share-text" class="share-fallback" aria-label="Kopyalanacak sonuç" readonly hidden></textarea>
 </dialog>
-<dialog class="share-dialog kyc-dialog" id="kyc-dialog" aria-labelledby="kyc-title"><div class="share-head"><h2 id="kyc-title">Döndürmek için hesabını doğrula</h2><button class="close-share" id="close-kyc" aria-label="Kapat">×</button></div><span class="draft-label">Topluluk Ödülü · Önizleme</span><p>Çarkı çevirmek ve ödül kazanmak için kimliği doğrulanmış bir Stablex hesabı gerekiyor. Para yatırma veya işlem şartı yok.</p><div class="kyc-path kyc-path-dialog"><span class="kyc-step"><b>1</b>Hesap aç</span><span class="kyc-step"><b>2</b>Kimliğini doğrula</span><span class="kyc-step"><b>3</b>Her gün döndür, 5/5 yap</span></div><p class="pool-note">5/5 yapamadığın gün ertesi gün yeniden denersin; kampanya boyunca hesap başına bir ödül.</p><div class="share-actions"><a class="btn primary kyc-cta" href="https://stablex.com.tr" target="_blank" rel="noopener noreferrer">Hesabını doğrula ↗</a><button class="btn" id="kyc-demo">Önizleme: doğrulanmış hesapla devam et</button></div></dialog>
-<dialog class="share-dialog reward-dialog" id="reward-dialog" aria-labelledby="reward-title"><div class="share-head"><h2 id="reward-title">Topluluk Ödülü</h2><button class="close-share" id="close-reward" aria-label="Kuralları kapat">×</button></div><span class="draft-label">Kampanya taslağı · Henüz aktif değil</span><div class="reward-amount">150 → 750 TL <small>hesap başına, kampanya boyunca bir kez</small></div><ul><li><b>Ödül katılımla büyür.</b> Günün ilk serisini oynayan her kişi o günün katılımına bir kez sayılır. Kademeler: 150 TL · 1.000 kişide 300 TL · 2.500 kişide 450 TL · 5.000 kişide 600 TL · 10.000 kişide 750 TL. En fazla 750 TL.</li><li><b>Kim kazanır?</b> Günün ilk serisinde 5 sorunun 5'ini de bilen herkes. Kura yoktur; antrenman serileri sayılmaz.</li><li><b>Çarkı çevirmek için doğrulanmış hesap.</b> Kampanya serisini oynamak ve ödül kazanmak için kimlik doğrulaması (KYC) tamamlanmış, 18 yaş üstü Stablex hesabı gerekir. Para yatırma veya işlem yapma şartı yoktur. Kampanyasız sürüm herkese açıktır.</li><li><b>Kazanana kadar her gün dene.</b> Günün serisinde 5/5 yapamazsan ertesi gün yeniden denersin; kampanya süresince ilk 5/5’inde ödülünü alırsın.</li><li><b>Hesap başına bir ödül.</b> Kampanya boyunca her doğrulanmış hesap en fazla bir kez ödül alır; ödül tutarı kazandığı günün seviyesidir. Ödül aldıktan sonra da oynayabilirsin; katılımın seviyeyi herkes için yükseltmeye devam eder. Günde tek geçerli seri.</li><li><b>Paylaşım ödül getirmez.</b> Paylaşmak isteğe bağlıdır; kimin kimi getirdiği ölçülmez.</li><li><b>Bütçe:</b> Seviye 00.00'da kesinleşir ve TL olarak hesaba geçer; kripto varlık verilmez. Günlük toplam bütçe baştan ilan edilir; aşılırsa bütçe 5/5 yapanlara eşit bölünür.</li></ul><p>Tarihler, tutarlar ve şartlar örnektir; Stablex hukuk/uyum onayı ve hesap entegrasyonu olmadan hak oluşturmaz. Eğlence amaçlıdır, yatırım tavsiyesi değildir; kripto varlıklar yüksek risk içerir.</p><button class="btn" id="reward-daily">Günlük Seriyi oyna</button></dialog>
+<dialog class="share-dialog kyc-dialog" id="kyc-dialog" aria-labelledby="kyc-title"><div class="share-head"><h2 id="kyc-title">Ortak havuza katıl</h2><button class="close-share" id="close-kyc" aria-label="Kapat">×</button></div><span class="draft-label">Önizleme · E-posta gönderilmez veya saklanmaz</span><p>Sıralamaya girmek ve kampanya sonunda havuzdan pay almak için takma ad ve e-posta yeterli.</p><form id="join-form" class="join-form" novalidate><label for="join-name">Takma ad</label><input id="join-name" maxlength="16" minlength="2" required autocomplete="nickname" placeholder="örn. piyasakurdu"><label for="join-email">E-posta</label><input id="join-email" type="email" maxlength="254" required autocomplete="email" placeholder="ornek@eposta.com"><label class="join-check"><input type="checkbox" id="join-mkt"><span>Stablex kampanya ve duyurularını e-postayla almak istiyorum. <small>(İsteğe bağlı; katılım şartı değildir.)</small></span></label><p class="pool-note">E-posta adresin yalnızca kampanya iletişimi ve ödül teslimi için kullanılır. Ayrıntılar aydınlatma metninde yer alır (örnek).</p><p class="join-error" id="join-error" role="alert"></p><button class="btn primary" id="join-submit" type="submit">Katıl ve döndür</button></form></dialog>
+<dialog class="share-dialog reward-dialog" id="reward-dialog" aria-labelledby="reward-title"><div class="share-head"><h2 id="reward-title">Ortak Havuz</h2><button class="close-share" id="close-reward" aria-label="Kuralları kapat">×</button></div><span class="draft-label">Kampanya taslağı · Henüz aktif değil</span><div class="reward-amount">30.000 → 150.000 TL <small>kampanya sonunda ilk 200 oyuncuya · kişi başı 150–750 TL</small></div><ul><li><b>Havuz birlikte büyür.</b> 30.000 TL ile başlar; tüm oyuncuların oynadığı her 2.500 günlük seride +10.000 TL eklenir. Tavan 150.000 TL. Her oyuncu günde bir kez sayılır (günün ilk serisi).</li><li><b>Sıralama: en istikrarlı oyuncu.</b> Kampanya boyunca oynadığın gün sayısı belirler; eşitlikte toplam doğru sayısı, sonra o puana ilk ulaşan öne geçer. Kura yoktur.</li><li><b>Dağıtım kampanya sonunda.</b> Havuz, sıralamadaki ilk 200 oyuncuya eşit bölünür: havuz 30.000 TL ise kişi başı 150 TL, tavanda 750 TL. Her kişi bir kez ödül alır.</li><li><b>Katılım:</b> Takma ad ve doğrulanmış e-posta; kampanya boyunca sonucunu en az bir kez paylaşmış olmak. Pazarlama izni isteğe bağlıdır, katılım şartı değildir.</li><li>Ödül kripto varlık değildir; türü ve teslim şekli hukuk/uyum onayıyla belirlenir. Antrenman serileri sayılmaz.</li></ul><p>Tarihler, tutarlar ve şartlar örnektir; hukuk/uyum onayı olmadan hak oluşturmaz. Eğlence amaçlıdır, yatırım tavsiyesi değildir; kripto varlıklar yüksek risk içerir.</p><button class="btn" id="reward-daily">Günlük Seriyi oyna</button></dialog>
 <script>
 window.STABLEX_STATIC=true;
 /*MARKET_DATA_BEGIN*/window.STABLEX_MARKET={"date":"2026-09-25","coins":[["BTC","Bitcoin",1700,38.1],["ETH","Ethereum",328,14.6],["XRP","XRP",96.5,3.87],["SOL","Solana",68.8,4.32],["TRX","TRON",32.3,0.486],["DOGE","Dogecoin",14.9,1.17],["LINK","Chainlink",9.88,0.667],["ADA","Cardano",9.33,0.577],["XLM","Stellar",7.53,0.354],["UNI","Uniswap",5.68,1.02],["LTC","Litecoin",5.58,1.74],["AVAX","Avalanche",4.51,0.545],["SHIB","Shiba Inu",3.4,0.105],["ONDO","Ondo",2.54,1.05],["AAVE","Aave",2.27,0.311],["ENA","Ethena",2.26,0.46],["DOT","Polkadot",1.97,0.183],["MORPHO","Morpho",1.96,0.0603],["PEPE","Pepe",1.86,0.423],["PUMP","Pump.fun",1.79,0.151],["SKY","Sky",1.71,0.024],["WLD","Worldcoin",1.61,0.314],["ARB","Arbitrum",1.47,0.321],["QNT","Quant",1.31,0.037]]};/*MARKET_DATA_END*/
@@ -438,7 +458,7 @@ async function spinPair(generation){
   $('feedback').textContent='Coinler hazır. Sağdaki daha yüksek mi, daha düşük mü?';
   document.querySelector('.guess').focus({preventScroll:true});ensureAnswersVisible();
 }
-$('spin').onclick=()=>{if($('spin').disabled)return;if(typeof requireKyc==='function'&&!requireKyc())return;$('spin').disabled=true;start();};
+$('spin').onclick=()=>{if($('spin').disabled)return;if(typeof requireJoin==='function'&&!requireJoin())return;$('spin').disabled=true;start();};
 paintWheel('left');paintWheel('right');
 
 function pickNext(exclude,against){let pool=COINS.filter(c=>!exclude.includes(c.s)&&(!against||val(c)!==val(against)));if(!pool.length)pool=COINS.filter(c=>!against||c.s!==against.s);return pool[Math.floor(Math.random()*pool.length)];}
@@ -526,52 +546,59 @@ function gameOver(){
   track('game_over',{mode:state.mode,metric:state.metric,final_streak:state.streak,daily_score:score});
   $('over').focus({preventScroll:true});$('over').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'start'});
 }
-// Topluluk Havuzu / Ödülü (önizleme): günün katılımı arttıkça 5/5 yapan kişi başına ödül kademeli yükselir.
-const CAMPAIGN={start:'2026-09-25',end:'2026-10-08',tiers:[[0,150],[1000,300],[2500,450],[5000,600],[10000,750]],minScore:5,samplePlayers:3240};
+// Topluluk Havuzu / Ortak Havuz (önizleme): havuz toplam katılımla tavana kadar büyür; kampanya sonunda en istikrarlı ilk 200 oyuncu eşit paylaşır.
+const CAMPAIGN={start:'2026-09-21',end:'2026-10-04',base:30000,step:10000,perPlays:2500,cap:150000,winners:200,samplePlays:18460,sampleEntrants:1240};
 const nf=n=>new Intl.NumberFormat('tr-TR').format(n);
 const tl=n=>nf(n)+' TL';
-function poolInfo(players=CAMPAIGN.samplePlayers){const t=CAMPAIGN.tiers;let i=0;while(i+1<t.length&&players>=t[i+1][0])i++;const next=t[i+1]||null;const span=next?next[0]-t[i][0]:1;return {players,level:t[i][1],tier:i,next:next?{players:next[0],level:next[1]}:null,capped:!next,within:next?Math.min(1,(players-t[i][0])/span):1,pool:t[i][1]};}
-function wonDay(){const d=readLocal('sbx-pool-won',null);return typeof d==='string'?d:null;}
-function isVerified(){return readLocal('sbx-demo-kyc',false)===true;}
+const SAMPLE_NAMES=['piyasakurdu','satoshiTR','mumcu','ayı_avcısı','boğa34','zincirci','hodl_hanım','altcoinci','grafikçi','kasaba_balinası','gecekuşu','bitkedi'];
 function poolDays(){const d=readLocal('sbx-pool-days',{});return d&&typeof d==='object'?d:{};}
+function joined(){const j=readLocal('sbx-join',null);return j&&typeof j.name==='string'?j:null;}
+function hasShared(){return readLocal('sbx-shared',false)===true;}
+function myStats(){const d=poolDays(),days=Object.keys(d).filter(k=>k>=CAMPAIGN.start&&k<=CAMPAIGN.end);return {days:days.length,correct:days.reduce((a,k)=>a+(+d[k]||0),0)};}
+function campaignDay(){const t=Date.parse((state.day||CAMPAIGN.start)+'T12:00:00Z'),s=Date.parse(CAMPAIGN.start+'T12:00:00Z'),e=Date.parse(CAMPAIGN.end+'T12:00:00Z');return Math.max(1,Math.min(Math.round((e-s)/864e5)+1,Math.round((t-s)/864e5)+1));}
+function poolInfo(plays=CAMPAIGN.samplePlays+myStats().days){const steps=Math.floor(plays/CAMPAIGN.perPlays),pool=Math.min(CAMPAIGN.cap,CAMPAIGN.base+steps*CAMPAIGN.step),capPlays=(CAMPAIGN.cap-CAMPAIGN.base)/CAMPAIGN.step*CAMPAIGN.perPlays;return {plays,pool,capped:pool>=CAMPAIGN.cap,toCap:Math.max(0,capPlays-plays),next:pool>=CAMPAIGN.cap?null:(steps+1)*CAMPAIGN.perPlays,progress:Math.min(1,plays/capPlays),perPerson:Math.round(pool/CAMPAIGN.winners)};}
 function recordPoolDay(score){if(state.practice||state.mode!=='daily')return;const d=poolDays();if(d[state.day]===undefined){d[state.day]=score;writeLocal('sbx-pool-days',d);}}
+function sampleBoard(){const cd=campaignDay();return SAMPLE_NAMES.map((name,i)=>({name,days:Math.max(1,cd-Math.floor(i/5)),correct:Math.max(1,cd*5-1-i*2)}));}
+function myRank(){const me=myStats();if(!me.days)return null;const cd=campaignDay(),missed=cd-me.days,acc=me.correct/(5*me.days);const better=Math.min(.97,Math.max(0,.08+missed*.12+(1-acc)*.25));return Math.max(1,Math.round(better*CAMPAIGN.sampleEntrants)+1);}
+function markShared(){if(!joined())return;writeLocal('sbx-shared',true);updateRewardPreview();if($('prize-share'))$('prize-share').hidden=true;}
+function lbRow(r,name,days,correct){return `<li class="lb-row"><span class="r">#${nf(r)}</span><span class="n">${esc(name)}</span><span class="d"><b>${days}</b> gün</span><span class="c">${correct} doğru</span></li>`;}
 function renderPrizeResult(){
   const score=state.dRes.filter(Boolean).length;recordPoolDay(score);
-  const info=poolInfo(),today=poolDays()[state.day],verified=isVerified(),won=today>=CAMPAIGN.minScore,prior=wonDay(),wonBefore=verified&&prior&&prior!==state.day;
-  if(verified&&won&&!prior&&!state.practice)writeLocal('sbx-pool-won',state.day);
-  $('prize-result').hidden=false;
-  $('prize-kyc').hidden=verified||state.practice;
-  if(state.practice){$('prize-title').textContent='Antrenman ödüle sayılmaz';$('prize-note').textContent='Yalnızca günün ilk serisi sayılır. Yarın yeni seri.';}
-  else if(wonBefore){$('prize-title').textContent='Ödülünü zaten kazandın ✓';$('prize-note').textContent=`Kampanya boyunca hesap başına bir ödül verilir (${prior.split('-').reverse().join('.')}). Oynamaya devam et: katılımın ödül seviyesini herkes için yükseltir.`;}
-  else if(won&&verified){$('prize-title').textContent='Ödüle hak kazandın ✓';$('prize-note').textContent=`Şu anki seviye ${tl(info.level)}; katılım arttıkça yükselir, 00.00'da kesinleşir. Kampanya boyunca hesap başına bir kez verilir (önizleme).`;}
-  else if(won){$('prize-title').textContent=`5/5! Bugünün ödülü ${tl(info.level)}`;$('prize-note').textContent='Ödül yalnızca kimliği doğrulanmış Stablex hesaplarına verilir. Doğrulamayı tamamla, yarınki 5/5’in sayılsın. Para yatırma veya işlem şartı yok.';}
-  else{$('prize-title').textContent='Bu kez ödül yok';$('prize-note').textContent=verified?'Ödül için günün ilk serisinde 5/5 gerekiyor. Yarın yeni seri, yeni şans.':'Ödül için günün ilk serisinde 5/5 ve doğrulanmış bir Stablex hesabı gerekiyor. Yarına hazır ol.';}
+  const info=poolInfo(),me=myStats(),rank=myRank(),shared=hasShared();
+  $('prize-result').hidden=false;$('prize-share').hidden=state.practice||shared;
+  if(state.practice){$('prize-title').textContent='Antrenman havuza sayılmaz';$('prize-note').textContent='Yalnızca günün ilk serisi sayılır. Yarın yeni seri.';}
+  else{$('prize-title').textContent='Bugünkü oyunun havuza sayıldı ✓';$('prize-note').textContent=`Aktif gün ${me.days} · toplam ${me.correct} doğru · tahmini sıran #${nf(rank||0)}. Kampanya sonunda ilk ${CAMPAIGN.winners} oyuncu havuzu paylaşır; şu an kişi başı ${tl(info.perPerson)}.`+(shared?'':' Ödül için sonucunu en az bir kez paylaşman gerekiyor.');}
   updateRewardPreview();
 }
 function updateRewardPreview(){
-  const info=poolInfo(),completed=state.mode==='daily'?Math.min(state.dRes.length,5):0,score=state.dRes.filter(Boolean).length,today=poolDays()[state.day],verified=isVerified();
-  $('pool-amount').textContent=tl(info.level);$('pool-cap').textContent='bugün 5/5 yapan kişi başına';
-  $('pool-tiers').innerHTML=CAMPAIGN.tiers.map(([p,l],i)=>`<div class="tier ${i<info.tier?'done':i===info.tier?'current':''}"><b>${nf(l)}</b><small>${p?nf(p)+' kişi':'başlangıç'}</small>${i===info.tier&&!info.capped?`<i style="width:${(info.within*100).toFixed(0)}%"></i>`:''}</div>`).join('');
-  $('pool-games').textContent=`Bugün ${nf(info.players)} kişi oynadı. `+(info.capped?'Ödül en üst seviyede.':`${nf(info.next.players)} kişide ödül ${tl(info.next.level)} olur.`);
-  const prior=wonDay();$('reward-status').textContent=verified&&prior&&prior!==state.day?'Ödülünü kazandın ✓ · kampanyada 1 kez':!verified?(today>=CAMPAIGN.minScore?`5/5 · ${tl(info.level)} doğrulanmış hesapla senindi`:'Misafir · ödül için hesabını doğrula'):today===undefined?'Henüz oynamadın':today>=CAMPAIGN.minScore?'5/5 · Ödüle hak kazandın ✓':`${today}/5 · Yarın tekrar dene`;
-  $('kyc-path').hidden=verified;
-  const gate=typeof document!=='undefined'?document.getElementById('spin-gate'):null;if(gate){gate.classList.toggle('locked',!verified);if(!verified&&$('wheel-stage').dataset.phase==='ready')$('spin-caption').textContent='Döndürmek için doğrulanmış hesap gerekir.';else if(verified&&$('wheel-stage').dataset.phase==='ready')$('spin-caption').textContent='Çarkları çevir. Coinler karşılaşsın.';}
-  $('demo-guest')?.setAttribute('aria-pressed',String(!verified));$('demo-kyc')?.setAttribute('aria-pressed',String(verified));
-  $('reward-ticket').dataset.complete=String(completed===5&&score>=CAMPAIGN.minScore&&!state.practice);
+  const info=poolInfo(),completed=state.mode==='daily'?Math.min(state.dRes.length,5):0,score=state.dRes.filter(Boolean).length,me=myStats(),j=joined(),shared=hasShared(),cd=campaignDay();
+  $('pool-amount').textContent=tl(info.pool);$('pool-cap').textContent=`/ ${tl(CAMPAIGN.cap)} tavan`;
+  $('pool-fill').style.width=(info.progress*100).toFixed(1)+'%';
+  $('pool-games').textContent=`Birlikte ${nf(info.plays)} günlük seri oynandı. `+(info.capped?'Havuz tavana ulaştı!':`Tavana ${nf(info.toCap)} seri kaldı · ${nf(info.next)} seride havuz ${tl(Math.min(CAMPAIGN.cap,info.pool+CAMPAIGN.step))}.`);
+  $('pool-per').innerHTML=`Şu an kişi başı <b>${tl(info.perPerson)}</b> · tavanda <b>${tl(CAMPAIGN.cap/CAMPAIGN.winners)}</b> · kampanya sonunda ilk ${CAMPAIGN.winners} oyuncuya`;
+  $('lb-meta').textContent=`Gün ${cd}/14 · ${nf(CAMPAIGN.sampleEntrants)} oyuncu · örnek`;
+  $('lb-list').innerHTML=sampleBoard().slice(0,5).map((r,i)=>lbRow(i+1,r.name,r.days,r.correct)).join('');
+  const rank=myRank();$('lb-me').innerHTML=j?(rank?`<ol class="lb-list">${lbRow(rank,j.name+' (sen)',me.days,me.correct)}</ol>`:`<ol class="lb-list"><li class="lb-row"><span class="r">—</span><span class="n">${esc(j.name)} (sen)</span><span class="d">bugün ilk serini oyna</span><span class="c"></span></li></ol>`):'';
+  $('pool-check').innerHTML=`<span class="${j?'ok':'no'}">Takma ad + e-posta</span><span class="${shared?'ok':'no'}">Sonucunu paylaş</span><span class="${me.days?'ok':'no'}">Aktif gün: ${me.days}</span>`;
+  $('reward-status')&&($('reward-status').textContent='');
+  const gate=typeof document!=='undefined'?document.getElementById('spin-gate'):null;if(gate){gate.classList.toggle('locked',!j);if($('wheel-stage').dataset.phase==='ready')$('spin-caption').textContent=j?'Çarkları çevir. Coinler karşılaşsın.':'Ortak havuza katılmak için takma ad ve e-posta ile başla.';}
+  $('reward-ticket').dataset.complete=String(completed===5&&!state.practice);
 }
 $('reward-details').onclick=()=>$('reward-dialog').showModal();
 $('close-reward').onclick=()=>$('reward-dialog').close();
 $('reward-daily').onclick=()=>{$('reward-dialog').close();selectMode('daily',$('m-daily'));$('spin').focus();$('wheel-stage').scrollIntoView({block:'center',behavior:'smooth'});};
-$('demo-guest').onclick=()=>{writeLocal('sbx-demo-kyc',false);updateRewardPreview();if(!$('over').hidden)renderPrizeResult();};
-$('demo-kyc').onclick=()=>{writeLocal('sbx-demo-kyc',true);updateRewardPreview();if(!$('over').hidden)renderPrizeResult();};
-function requireKyc(){if(isVerified())return true;$('kyc-dialog').showModal();return false;}
+function requireJoin(){if(joined())return true;$('join-error').textContent='';$('kyc-dialog').showModal();return false;}
 $('close-kyc').onclick=()=>$('kyc-dialog').close();
-$('kyc-demo').onclick=()=>{writeLocal('sbx-demo-kyc',true);$('kyc-dialog').close();updateRewardPreview();$('spin').click();};
+$('join-form').onsubmit=e=>{e.preventDefault();const name=$('join-name').value.trim(),email=$('join-email').value.trim();
+  if(name.length<2||name.length>16){$('join-error').textContent='Takma ad 2–16 karakter olmalı.';return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){$('join-error').textContent='Geçerli bir e-posta adresi gir.';return;}
+  writeLocal('sbx-join',{name});$('join-email').value='';$('kyc-dialog').close();updateRewardPreview();$('spin').click();};
+$('prize-share').onclick=()=>$('share').click();
 document.body.classList.add('campaign');
 function shareText(){
   const source=state.source==='demo'?' · Veri '+DATA_DATE:'';
   const text=state.mode==='daily'?`Stablex · Coin Düellosu ${state.day}\n${metricName()}${source}${state.practice?' · Antrenman':''}\n${state.dRes.map(r=>r?'🟩':'🟥').join('')} ${state.dRes.filter(Boolean).length}/5`:`Stablex · Coin Düellosu\n${metricName()}${source}\n${state.streak} seri yaptım. Rekorumu geçebilir misin?`;
-  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nBugünkü topluluk ödülü: ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL · katılım arttıkça yükselir`:'';
+  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nOrtak havuz ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL · tavana birlikte ulaşalım`:'';
   let base=runtime.gameURL; if(!base&&/^https?:$/.test(location.protocol)&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname))base=location.origin+location.pathname;
   if(!base)return text+poolLine+'\n(Yerel önizleme — oyun bağlantısı yayında eklenecek.)';
   try{return text+poolLine+'\n'+new URL(base).href;}catch{return text+poolLine;}
@@ -614,14 +641,14 @@ async function buildChallengeCard(model){
   for(const [img,sym,x] of [[left,model.left,330],[right,model.right,750]]){const cy=1005;ctx.beginPath();ctx.arc(x,cy,70,0,Math.PI*2);ctx.fillStyle='#171717';ctx.fill();ctx.lineWidth=7;ctx.strokeStyle=coinColor(sym);ctx.stroke();if(img){ctx.save();ctx.beginPath();ctx.arc(x,cy,58,0,Math.PI*2);ctx.clip();ctx.drawImage(img,x-58,cy-58,116,116);ctx.restore();}else text(sym,x,cy+12,32);text(sym,x,cy+122,36,'#fff',800);}
   ctx.beginPath();ctx.arc(540,1005,36,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();text('VS',540,1016,26,'#141414',900);
   text(model.mode==='daily'?'Sen kaç yaparsın?':challengeLine(model.score,model.mode),540,1218,50,'#fff',900);
-  const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Bugünkü topluluk ödülü ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
+  const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Ortak havuz ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
   text(`${date}${model.source==='demo'&&DATA_DATE!==date?' · Veri '+DATA_DATE:''} · Eğlence amaçlıdır, yatırım tavsiyesi değildir.`,540,1322,19,'#7a7a7a',400);
   ctx.restore();ctx.textAlign='left';
   canvas.setAttribute('aria-label',`${title?title+'. ':''}${model.score}${model.mode==='daily'?'/5':' doğru seri'}. ${model.results.filter(Boolean).length} doğru. ${model.practice?'Antrenman. ':''}${model.hardest?'En yakın düello':'Son karşılaşma'} ${model.left} ve ${model.right}.${model.source==='demo'?' Veriler '+DATA_DATE+' tarihli.':''}`);
   return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve({blob,canvas}):reject(Error('PNG unavailable')),'image/png'));
 }
 async function openChallenge(){
-  if(!state.complete)return;
+  if(!state.complete)return;if(typeof markShared==='function')markShared();
   const generation=++shareBuild;shareAsset=null;
   $('dialog-share-text').hidden=true;$('share-status').textContent='Sonuç kartın hazırlanıyor…';$('native-share').disabled=true;$('save-card').disabled=true;$('native-share').textContent='Kart hazırlanıyor…';
   const preview=$('challenge-card').getContext('2d');if(preview){preview.fillStyle='#141414';preview.fillRect(0,0,1080,1350);}$('challenge-card').setAttribute('aria-label','Sonuç kartı hazırlanıyor');
