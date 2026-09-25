@@ -202,6 +202,13 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 .demo-switch button[aria-pressed='true']{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 .pool-result .kyc-cta{margin-top:6px}
 @media(max-width:600px){.kyc-path .kyc-cta{margin-left:0;width:100%!important}}
+
+.spin-gate.locked .spin-button{background:#3a3a3a;box-shadow:none}
+.spin-gate.locked .spin-button:after{content:'🔒';position:absolute;top:14px;right:18px;font-size:16px}
+.spin-button{position:relative}
+.kyc-dialog p{font-size:14px;color:var(--ink-2)}
+.kyc-dialog .share-actions{display:flex;flex-direction:column;gap:8px}
+.kyc-dialog .kyc-cta{width:100%!important;min-height:48px!important}
 </style>
 </head>
 <body>
@@ -426,7 +433,7 @@ async function spinPair(generation){
   $('feedback').textContent='Coinler hazır. Sağdaki daha yüksek mi, daha düşük mü?';
   document.querySelector('.guess').focus({preventScroll:true});ensureAnswersVisible();
 }
-$('spin').onclick=()=>{if($('spin').disabled)return;$('spin').disabled=true;start();};
+$('spin').onclick=()=>{if($('spin').disabled)return;if(typeof requireKyc==='function'&&!requireKyc())return;$('spin').disabled=true;start();};
 paintWheel('left');paintWheel('right');
 
 function pickNext(exclude,against){let pool=COINS.filter(c=>!exclude.includes(c.s)&&(!against||val(c)!==val(against)));if(!pool.length)pool=COINS.filter(c=>!against||c.s!==against.s);return pool[Math.floor(Math.random()*pool.length)];}
