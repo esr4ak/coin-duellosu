@@ -149,6 +149,35 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
  .panel h2{font-size:30px}
 }
 @media(max-width:360px){.wheel-stage .card#left .value,.wheel-stage .card#right .value{font-size:27px}.play-shell h1{font-size:26px}}
+
+/* Topluluk Havuzu */
+.pool-ticket{display:flex!important;flex-direction:column;gap:12px;background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 16%,var(--surface)),var(--surface) 60%)!important;border:1px solid color-mix(in srgb,var(--brand) 35%,var(--line))!important;border-radius:18px;padding:22px!important}
+.pool-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pool-ticket .reward-kicker{font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--brand)}
+.pool-rules{min-height:34px!important;padding:6px 14px!important;font-size:12px!important;width:auto!important}
+.pool-ticket h2{margin:0;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+#pool-amount{font-size:40px;font-weight:900;letter-spacing:-.045em;line-height:1;color:var(--ink)}
+#pool-cap{font-size:13px;color:var(--ink-2);font-weight:700}
+.pool-bar{position:relative;height:12px;border-radius:99px;background:var(--muted);overflow:hidden}
+.pool-bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#dc0005,#ff676b);border-radius:99px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.pool-ticks{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(11.111% - 2px),color-mix(in srgb,var(--surface) 80%,transparent) calc(11.111% - 2px) 11.111%)}
+#pool-games{margin:0;font-size:13px;color:var(--ink);font-weight:600}
+.pool-me{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+.pool-me>span{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+.pool-me strong{margin-left:auto;font-size:14px;font-weight:900}
+.pool-days{display:flex;gap:6px}
+.pool-days i{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:900;color:var(--ink-2)}
+.pool-days i.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.pool-days i.today{border-color:var(--brand)}
+.pool-note{margin:0;font-size:11px;color:var(--ink-2);line-height:1.5}
+.pool-result{border-color:color-mix(in srgb,var(--brand) 40%,var(--line))!important}
+.pool-result strong{font-size:20px!important}
+.reward-dialog ul{padding-left:18px;display:grid;gap:8px;font-size:14px}.reward-dialog li b{color:var(--ink)}
+.campaign .card .cta{display:none}
+.pool-ticket{text-align:left!important;align-items:stretch!important}.pool-ticket>*{width:100%;box-sizing:border-box}.pool-ticket h2{justify-content:flex-start}.pool-me{justify-content:flex-start}
+.pool-bar{width:100%;display:block}
+.reward-dialog .reward-amount small{display:block;font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:0;margin-top:4px}
+@media(max-width:600px){#pool-amount{font-size:34px}.pool-ticket{padding:18px!important}}
 </style>
 </head>
 <body>
@@ -425,7 +454,6 @@ async function guess(g){
     if(result){state.streak=result.streak;state.round=result.round;state.dRes=result.results;setProfile(result.profile||state.profile,state.account);if(!result.persisted&&state.account)$('account-note').textContent='Sonuç henüz hesaba kaydedilemedi.';}
     if(state.mode==='endless'&&!state.account&&state.streak>best){best=state.streak;writeLocal('sbx-hb-best-'+state.metric,best);$('best').textContent=best;}
     state.complete=state.mode==='daily'?state.dIdx>=5:!ok;updateProgress();
-    
     if(state.complete){gameOver();state.busy=false;}else{if(result){state.left=result.left;state.right=result.right;}else advance(state.mode==='daily'?state.daily[state.dIdx+1]:pickNext([state.left.s,state.right.s,...state.recent],state.right));await spinPair(generation);}
   },matchMedia('(prefers-reduced-motion:reduce)').matches?450:1050);
 }
@@ -464,14 +492,15 @@ function gameOver(){
 }
 function renderPrizeResult(){}
 function updateRewardPreview(){}
-function askEmailPreview(){return Promise.resolve();}
+function poolInfo(){return null;}
 
 function shareText(){
   const source=state.source==='demo'?' · Veri '+DATA_DATE:'';
   const text=state.mode==='daily'?`Stablex · Coin Düellosu ${state.day}\n${metricName()}${source}${state.practice?' · Antrenman':''}\n${state.dRes.map(r=>r?'🟩':'🟥').join('')} ${state.dRes.filter(Boolean).length}/5`:`Stablex · Coin Düellosu\n${metricName()}${source}\n${state.streak} seri yaptım. Rekorumu geçebilir misin?`;
+  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nTopluluk havuzunu birlikte büyütüyoruz: ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL`:'';
   let base=runtime.gameURL; if(!base&&/^https?:$/.test(location.protocol)&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname))base=location.origin+location.pathname;
-  if(!base)return text+'\n(Yerel önizleme — oyun bağlantısı yayında eklenecek.)';
-  try{return text+'\n'+new URL(base).href;}catch{return text;}
+  if(!base)return text+poolLine+'\n(Yerel önizleme — oyun bağlantısı yayında eklenecek.)';
+  try{return text+poolLine+'\n'+new URL(base).href;}catch{return text+poolLine;}
 }
 let shareAsset=null,shareBuild=0,shareFormat='story';
 function scoreTitle(score){return score>=5?'Piyasa Kurdu':score>=3?'Keskin Göz':'Yarın Rövanş';}
@@ -511,7 +540,7 @@ async function buildChallengeCard(model){
   for(const [img,sym,x] of [[left,model.left,330],[right,model.right,750]]){const cy=1005;ctx.beginPath();ctx.arc(x,cy,70,0,Math.PI*2);ctx.fillStyle='#171717';ctx.fill();ctx.lineWidth=7;ctx.strokeStyle=coinColor(sym);ctx.stroke();if(img){ctx.save();ctx.beginPath();ctx.arc(x,cy,58,0,Math.PI*2);ctx.clip();ctx.drawImage(img,x-58,cy-58,116,116);ctx.restore();}else text(sym,x,cy+12,32);text(sym,x,cy+122,36,'#fff',800);}
   ctx.beginPath();ctx.arc(540,1005,36,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();text('VS',540,1016,26,'#141414',900);
   text(model.mode==='daily'?'Sen kaç yaparsın?':challengeLine(model.score,model.mode),540,1218,50,'#fff',900);
-  text('stablex.com.tr',540,1270,30,'#ff676b',800);
+  const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Topluluk havuzu ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
   text(`${date}${model.source==='demo'&&DATA_DATE!==date?' · Veri '+DATA_DATE:''} · Eğlence amaçlıdır, yatırım tavsiyesi değildir.`,540,1322,19,'#7a7a7a',400);
   ctx.restore();ctx.textAlign='left';
   canvas.setAttribute('aria-label',`${title?title+'. ':''}${model.score}${model.mode==='daily'?'/5':' doğru seri'}. ${model.results.filter(Boolean).length} doğru. ${model.practice?'Antrenman. ':''}${model.hardest?'En yakın düello':'Son karşılaşma'} ${model.left} ve ${model.right}.${model.source==='demo'?' Veriler '+DATA_DATE+' tarihli.':''}`);

@@ -150,6 +150,35 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
  .panel h2{font-size:30px}
 }
 @media(max-width:360px){.wheel-stage .card#left .value,.wheel-stage .card#right .value{font-size:27px}.play-shell h1{font-size:26px}}
+
+/* Topluluk Havuzu */
+.pool-ticket{display:flex!important;flex-direction:column;gap:12px;background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 16%,var(--surface)),var(--surface) 60%)!important;border:1px solid color-mix(in srgb,var(--brand) 35%,var(--line))!important;border-radius:18px;padding:22px!important}
+.pool-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pool-ticket .reward-kicker{font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--brand)}
+.pool-rules{min-height:34px!important;padding:6px 14px!important;font-size:12px!important;width:auto!important}
+.pool-ticket h2{margin:0;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+#pool-amount{font-size:40px;font-weight:900;letter-spacing:-.045em;line-height:1;color:var(--ink)}
+#pool-cap{font-size:13px;color:var(--ink-2);font-weight:700}
+.pool-bar{position:relative;height:12px;border-radius:99px;background:var(--muted);overflow:hidden}
+.pool-bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#dc0005,#ff676b);border-radius:99px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.pool-ticks{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(11.111% - 2px),color-mix(in srgb,var(--surface) 80%,transparent) calc(11.111% - 2px) 11.111%)}
+#pool-games{margin:0;font-size:13px;color:var(--ink);font-weight:600}
+.pool-me{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+.pool-me>span{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+.pool-me strong{margin-left:auto;font-size:14px;font-weight:900}
+.pool-days{display:flex;gap:6px}
+.pool-days i{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:900;color:var(--ink-2)}
+.pool-days i.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.pool-days i.today{border-color:var(--brand)}
+.pool-note{margin:0;font-size:11px;color:var(--ink-2);line-height:1.5}
+.pool-result{border-color:color-mix(in srgb,var(--brand) 40%,var(--line))!important}
+.pool-result strong{font-size:20px!important}
+.reward-dialog ul{padding-left:18px;display:grid;gap:8px;font-size:14px}.reward-dialog li b{color:var(--ink)}
+.campaign .card .cta{display:none}
+.pool-ticket{text-align:left!important;align-items:stretch!important}.pool-ticket>*{width:100%;box-sizing:border-box}.pool-ticket h2{justify-content:flex-start}.pool-me{justify-content:flex-start}
+.pool-bar{width:100%;display:block}
+.reward-dialog .reward-amount small{display:block;font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:0;margin-top:4px}
+@media(max-width:600px){#pool-amount{font-size:34px}.pool-ticket{padding:18px!important}}
 </style>
 </head>
 <body>
@@ -193,7 +222,7 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
     <span class="result-kicker" id="result-label">BUGÜNÜN SKORUN</span><div class="result-big"><strong id="result-score">0</strong><span>/5</span></div><span class="score-title" id="score-title"></span><h2 id="over-title"></h2>
     <p id="over-text"></p>
     <div class="grid-share result-grid" id="over-grid"></div><div class="hardest" id="hardest"><span class="result-kicker">EN ZOR KARŞILAŞMAN</span><strong id="hardest-pair"></strong><p id="hardest-note"></p><small>Değer farkı büyük olan değere bölünerek hesaplanır.</small></div><details class="round-details"><summary>5 karşılaşmanı incele</summary><ol id="round-summary"></ol></details><div class="countdown-box"><span class="result-kicker" id="countdown-label">YARININ SERİSİNE · TSİ 00.00</span><strong id="countdown">00:00:00</strong><span>Yeni coinler, yeni eşleşmeler.</span></div>
-    <div id="prize-result" class="hardest" hidden><span class="result-kicker">ÖDÜL SENARYOSU · AKTİF DEĞİL</span><strong id="prize-title"></strong><p id="prize-note"></p><button class="btn primary" id="prize-email" hidden>E-posta adımını tamamla</button></div>
+    <div id="prize-result" class="hardest pool-result" hidden><span class="result-kicker">TOPLULUK HAVUZU · ÖNİZLEME</span><strong id="prize-title"></strong><p id="prize-note"></p><div class="pool-days" id="prize-days"></div></div>
     <div class="btns">
       <button class="btn" id="again">Tekrar oyna</button>
       <button class="btn primary" id="share">Sonucunu paylaş ↗</button>
@@ -201,7 +230,7 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
     <span class="toast" id="toast" role="status" hidden>Kopyalandı</span><textarea id="share-fallback" class="share-fallback" aria-label="Paylaşım metni" readonly hidden></textarea>
   </section>
 
-<section class="reward-ticket" id="reward-ticket" aria-labelledby="reward-heading"><div class="reward-mark" aria-hidden="true">%</div><div><span class="reward-kicker">3+ doğru avantajı · Kampanya taslağı</span><h2 id="reward-heading">5 soru. Bir komisyon molası.</h2><p>5 soruda en az 3 doğru: komisyon avantajı senaryosu.</p><div class="reward-progress"><progress id="reward-progress" value="0" max="5" aria-label="Katılım görevi"></progress><span id="reward-status">Günlük Seri · 0/5</span></div><p style="margin-top:8px">Önizleme: aktif kampanya veya kazanılmış ödül yok.</p></div><button class="btn" id="reward-details">Avantajı incele ↗</button></section>
+<section class="reward-ticket pool-ticket" id="reward-ticket" aria-labelledby="reward-heading"><div class="pool-top"><span class="reward-kicker">Topluluk Havuzu · Önizleme</span><button class="btn pool-rules" id="reward-details">Kurallar</button></div><h2 id="reward-heading"><span id="pool-amount">0 TL</span><small id="pool-cap">/ 100.000 TL tavan</small></h2><div class="pool-bar" aria-hidden="true"><i id="pool-fill"></i><span class="pool-ticks" id="pool-ticks"></span></div><p id="pool-games">Birlikte oynadıkça havuz büyür.</p><div class="pool-me"><span>Senin durumun</span><div class="pool-days" id="pool-days"></div><strong id="reward-status">0/3 gün</strong></div><p class="pool-note">Havuz, şartı sağlayan katılımcılara eşit bölünür; kişi başı en fazla 250 TL. Rakamlar örnektir, kampanya aktif değildir. Yatırım tavsiyesi değildir; kripto varlıklar yüksek risk içerir.</p></section>
   <div class="info"><details><summary>Nasıl oynanır?</summary><p>Döndür butonuyla çarkları çevir. Her tahminden sonra oyun devam ediyorsa sıradaki çift otomatik gelir. İlk turda iki çark döner. Sonraki turlarda önceki sağ coin sola geçer ve yalnızca sağ çark döner. İlk coinin değeri açık. Diğer coinin piyasa değeri daha yüksek mi, daha düşük mü, tahmin et. Yanlış yanıt versen de 5 karşılaşmayı tamamlarsın. Eşitlikte iki yanıt da doğru kabul edilir.</p><p>Piyasa değeri, dolaşımdaki arz ile birim fiyatın çarpımıdır; tek bir coinin fiyatı değildir. ABD dolarıyla gösterilir. Canlı günlük havuz, Stablex’te listelenen uygun coinlerin piyasa değeri en yüksek 24 tanesinden oluşur. Türkiye saatiyle her yeni günün ilk oyununda veriler sabitlenir; herkes aynı 6 coinle, farklı eşleşme sıralarında 5 karşılaşma oynar. Çevrimdışıyken örnek havuz kullanılır.</p><p>USDT, USDC ve altına endeksli PAXG/XAUT oyun dışında tutulur.</p></details><span class="account-note" id="account-note">Her gün yeni eşleşmeler.</span></div>
   <p class="disclaimer">Eğlence amaçlıdır, yatırım tavsiyesi değildir. Yalnızca Stablex’te listelenen coinler. Canlı veri alınamadığında tarihli sabit piyasa değerleri kullanılır.</p>
 </div>
@@ -214,8 +243,7 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 <p class="share-help">Instagram için görseli indir; Hikâye veya Gönderi oluştururken galerinden seç. Diğer uygulamalar için paylaşım menüsünü kullan. Paylaşmak tamamen isteğe bağlıdır.</p><p id="share-status" class="share-status" role="status"></p>
 <textarea id="dialog-share-text" class="share-fallback" aria-label="Kopyalanacak sonuç" readonly hidden></textarea>
 </dialog>
-<dialog class="share-dialog reward-dialog" id="reward-dialog" aria-labelledby="reward-title"><div class="share-head"><h2 id="reward-title">Komisyon molası</h2><button class="close-share" id="close-reward" aria-label="Avantajı kapat">×</button></div><span class="draft-label">Önerilen kampanya · Henüz aktif değil</span><div class="reward-amount">50 TL <small>üst sınıra kadar</small></div><p>İşlem komisyonunda %100 indirim, 7 gün kullanım süresi. Tutar ve süre değerlendirme için örnektir; kesin kampanya koşulları değildir.</p><ul><li>Günlük seride 5 sorudan en az 3 doğru ve e-posta adımı önerilir. Antrenman sonuçları kapsam dışıdır.</li><li>Paylaşım, arkadaş daveti, para yatırma veya işlem hacmi katılım şartı değildir.</li><li>Öneri: uygunluğu doğrulanmış 18 yaş üstü mevcut hesap başına, kampanya boyunca tek hak.</li><li>Nakit veya coin ödülü değildir. Önerilen indirim yalnızca işlem komisyonuna uygulanır; diğer ücretleri kapsamaz.</li></ul><p>Gerçek avantaj tanımı, kampanya bütçesi, tarihler ve uygunluk şartları Stablex hukuk/uyum değerlendirmesi ve hesap entegrasyonu tamamlandıktan sonra belirlenebilir. Bu önizleme hak oluşturmaz.</p><button class="btn" id="reward-daily">Günlük Seriyi oyna</button></dialog>
-<dialog class="share-dialog" id="email-dialog" aria-labelledby="email-title"><span class="draft-label">Kampanya deneyimi · Önizleme</span><h2 id="email-title">İlk düello tamam. Sırada avantaj var.</h2><p>5 soruda en az 3 doğru yap; komisyon avantajı senaryosunu tamamla.</p><form id="email-form"><label for="email-input">E-posta adresin</label><input id="email-input" name="email" type="email" autocomplete="email" placeholder="ornek@eposta.com" maxlength="254" required><p class="share-help">Bu önizlemede adresin gönderilmez veya saklanmaz. Gönderim ve pazarlama izni alınmaz; yalnızca ekran akışı denenir.</p><button class="btn primary" type="submit">Devam et</button><button class="btn" id="email-skip" type="button">Şimdilik geç</button></form><p class="share-help">Örnek avantaj: 50 TL üst sınıra kadar işlem komisyonu indirimi, 7 gün. Aktif kampanya değildir.</p></dialog>
+<dialog class="share-dialog reward-dialog" id="reward-dialog" aria-labelledby="reward-title"><div class="share-head"><h2 id="reward-title">Topluluk Havuzu</h2><button class="close-share" id="close-reward" aria-label="Kuralları kapat">×</button></div><span class="draft-label">Kampanya taslağı · Henüz aktif değil</span><div class="reward-amount">100.000 TL <small>havuz tavanı</small></div><ul><li><b>Havuz birlikte büyür.</b> 10.000 TL ile başlar; tüm katılımcıların tamamladığı her 5.000 günlük seride +10.000 TL eklenir. Tavan 100.000 TL; kademeler baştan ilan edilir.</li><li><b>Paylaşım ödül getirmez.</b> Paylaşmak isteğe bağlıdır; kimin kimi getirdiği ölçülmez ve ödüllendirilmez.</li><li><b>Hak kazanma:</b> 18 yaş üstü, kampanya başlamadan önce kimliği doğrulanmış Stablex hesabı ve kampanya süresince en az 3 gün, günün ilk serisinde 5 sorudan en az 3 doğru.</li><li><b>Dağıtım kura değil:</b> Havuz, şartı sağlayan herkese eşit bölünür; kişi başı en fazla 250 TL, TL olarak hesaba. Kripto varlık verilmez.</li><li>Antrenman serileri sayılmaz. Günde hesap başına tek geçerli seri.</li></ul><p>Tarihler, tutarlar ve şartlar örnektir; Stablex hukuk/uyum onayı ve hesap entegrasyonu olmadan hak oluşturmaz. Eğlence amaçlıdır, yatırım tavsiyesi değildir; kripto varlıklar yüksek risk içerir.</p><button class="btn" id="reward-daily">Günlük Seriyi oyna</button></dialog>
 <script>
 window.STABLEX_STATIC=true;
 /*MARKET_DATA_BEGIN*/window.STABLEX_MARKET={"date":"2026-09-25","coins":[["BTC","Bitcoin",1700,38.1],["ETH","Ethereum",328,14.6],["XRP","XRP",96.5,3.87],["SOL","Solana",68.8,4.32],["TRX","TRON",32.3,0.486],["DOGE","Dogecoin",14.9,1.17],["LINK","Chainlink",9.88,0.667],["ADA","Cardano",9.33,0.577],["XLM","Stellar",7.53,0.354],["UNI","Uniswap",5.68,1.02],["LTC","Litecoin",5.58,1.74],["AVAX","Avalanche",4.51,0.545],["SHIB","Shiba Inu",3.4,0.105],["ONDO","Ondo",2.54,1.05],["AAVE","Aave",2.27,0.311],["ENA","Ethena",2.26,0.46],["DOT","Polkadot",1.97,0.183],["MORPHO","Morpho",1.96,0.0603],["PEPE","Pepe",1.86,0.423],["PUMP","Pump.fun",1.79,0.151],["SKY","Sky",1.71,0.024],["WLD","Worldcoin",1.61,0.314],["ARB","Arbitrum",1.47,0.321],["QNT","Quant",1.31,0.037]]};/*MARKET_DATA_END*/
@@ -430,8 +458,7 @@ async function guess(g){
     if(result){state.streak=result.streak;state.round=result.round;state.dRes=result.results;setProfile(result.profile||state.profile,state.account);if(!result.persisted&&state.account)$('account-note').textContent='Sonuç henüz hesaba kaydedilemedi.';}
     if(state.mode==='endless'&&!state.account&&state.streak>best){best=state.streak;writeLocal('sbx-hb-best-'+state.metric,best);$('best').textContent=best;}
     state.complete=state.mode==='daily'?state.dIdx>=5:!ok;updateProgress();
-    if(state.mode==='daily'&&state.round===1){await askEmailPreview();if(generation!==state.generation)return;}
-    if(state.complete){gameOver();state.busy=false;if(!state.emailPreview){await askEmailPreview('end');if(generation!==state.generation)return;renderPrizeResult();}}else{if(result){state.left=result.left;state.right=result.right;}else advance(state.mode==='daily'?state.daily[state.dIdx+1]:pickNext([state.left.s,state.right.s,...state.recent],state.right));await spinPair(generation);}
+    if(state.complete){gameOver();state.busy=false;}else{if(result){state.left=result.left;state.right=result.right;}else advance(state.mode==='daily'?state.daily[state.dIdx+1]:pickNext([state.left.s,state.right.s,...state.recent],state.right));await spinPair(generation);}
   },matchMedia('(prefers-reduced-motion:reduce)').matches?450:1050);
 }
 function advance(next){state.recent=[state.left.s,...state.recent].slice(0,6);state.left=state.right;state.right=next;}
@@ -467,39 +494,42 @@ function gameOver(){
   track('game_over',{mode:state.mode,metric:state.metric,final_streak:state.streak,daily_score:score});
   $('over').focus({preventScroll:true});$('over').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'start'});
 }
+// Topluluk Havuzu (önizleme): havuz toplam katılımla, baştan ilan edilen kademelerle ve tavanla büyür.
+const CAMPAIGN={start:'2026-09-25',end:'2026-10-08',base:10000,step:10000,perGames:5000,cap:100000,personCap:250,needDays:3,minScore:3,sampleGames:14320};
+function poolInfo(games=CAMPAIGN.sampleGames){const tiers=Math.floor(games/CAMPAIGN.perGames),pool=Math.min(CAMPAIGN.cap,CAMPAIGN.base+tiers*CAMPAIGN.step),maxGames=(CAMPAIGN.cap-CAMPAIGN.base)/CAMPAIGN.step*CAMPAIGN.perGames;return {games,pool,capped:pool>=CAMPAIGN.cap,next:pool>=CAMPAIGN.cap?null:(tiers+1)*CAMPAIGN.perGames,progress:Math.min(1,games/maxGames)};}
+const tl=n=>new Intl.NumberFormat('tr-TR').format(n)+' TL';
+function poolDays(){const d=readLocal('sbx-pool-days',{});return d&&typeof d==='object'?d:{};}
+function qualifiedDays(){const d=poolDays();return Object.keys(d).filter(k=>k>=CAMPAIGN.start&&k<=CAMPAIGN.end&&d[k]>=CAMPAIGN.minScore).length;}
+function recordPoolDay(score){if(state.practice||state.mode!=='daily')return;const d=poolDays();if(d[state.day]===undefined){d[state.day]=score;writeLocal('sbx-pool-days',d);}}
+function dayDots(el,count,today){el.innerHTML=Array.from({length:CAMPAIGN.needDays},(_,i)=>`<i class="${i<count?'on':''}${i===count&&today?' today':''}" aria-hidden="true">${i<count?'✓':i+1}</i>`).join('');el.setAttribute('aria-label',`${Math.min(count,CAMPAIGN.needDays)}/${CAMPAIGN.needDays} gün tamamlandı`);}
 function renderPrizeResult(){
-  const score=state.dRes.filter(Boolean).length;
+  const score=state.dRes.filter(Boolean).length;recordPoolDay(score);
+  const q=qualifiedDays(),need=CAMPAIGN.needDays,today=poolDays()[state.day];
   $('prize-result').hidden=false;
-  $('prize-title').textContent=state.practice?'Antrenman tamamlandı':score>=3?'Komisyonsuzluk hedefini geçtin!':'Bir sonraki günlük seride yeniden dene';
-  $('prize-note').textContent=state.practice?'Antrenman sonuçları ödül hakkı oluşturmaz.':score>=3?(state.emailPreview?'Senaryoda komisyon avantajı adımına ulaştın. E-posta adımı tamamlandı; gerçek ödül tanımlanmadı.':'3+ doğru koşulu tamamlandı. Senaryoda avantaj için e-posta adımı da gerekir; gerçek ödül tanımlanmadı.'):'Bu senaryoda komisyon avantajı için 5 soruda en az 3 doğru gerekiyor.';
-  $('prize-email').hidden=state.practice||score<3||state.emailPreview;
+  $('prize-title').textContent=state.practice?'Antrenman havuza sayılmaz':today>=CAMPAIGN.minScore?'Bugün havuza sayıldı ✓':'Bugün sayılmadı';
+  $('prize-note').textContent=state.practice?'Yalnızca günün ilk serisi sayılır. Yarın yeni seri.':today>=CAMPAIGN.minScore?(q>=need?`${need}/${need} gün tamam: hak kazanma şartını sağladın (önizleme). Havuz, şartı sağlayanlara eşit bölünür; kişi başı en fazla ${tl(CAMPAIGN.personCap)}.`:`${q}/${need} gün tamam. Hak için ${need-q} gün daha 3+ doğru yap.`):`Havuza sayılmak için günün ilk serisinde en az ${CAMPAIGN.minScore} doğru gerekiyor. Yarın yeni seri.`;
+  dayDots($('prize-days'),q,false);updateRewardPreview();
 }
 function updateRewardPreview(){
-  const completed=state.mode==='daily'?Math.min(state.dRes.length,5):0,score=state.dRes.filter(Boolean).length;
-  $('reward-progress').value=completed;
-  $('reward-status').textContent=`${completed}/5 tamamlandı · ${score} doğru · Hedef 3+`;
-  $('reward-ticket').dataset.complete=String(completed===5&&score>=3&&!state.practice);
+  const info=poolInfo(),completed=state.mode==='daily'?Math.min(state.dRes.length,5):0,score=state.dRes.filter(Boolean).length,q=qualifiedDays();
+  $('pool-amount').textContent=tl(info.pool);$('pool-cap').textContent=`/ ${tl(CAMPAIGN.cap)} tavan`;
+  $('pool-fill').style.width=(info.progress*100).toFixed(1)+'%';
+  $('pool-games').textContent=`Birlikte ${new Intl.NumberFormat('tr-TR').format(info.games)} seri tamamlandı. `+(info.capped?'Havuz tavana ulaştı.':`${new Intl.NumberFormat('tr-TR').format(info.next)} seride havuz ${tl(Math.min(CAMPAIGN.cap,info.pool+CAMPAIGN.step))} olur.`);
+  dayDots($('pool-days'),q,!state.practice&&poolDays()[state.day]===undefined);
+  $('reward-status').textContent=`${Math.min(q,CAMPAIGN.needDays)}/${CAMPAIGN.needDays} gün`;
+  $('reward-ticket').dataset.complete=String(completed===5&&score>=CAMPAIGN.minScore&&!state.practice);
 }
-function askEmailPreview(stage='first'){
-  return new Promise(resolve=>{
-    const dialog=$('email-dialog');$('email-form').reset();
-    $('email-title').textContent=stage==='first'?'İlk düello tamam. Sırada avantaj var.':stage==='prize'?'Avantaj için son adım.':state.dRes.filter(Boolean).length>=3&&!state.practice?'Hedef tamam. E-posta adımını tamamla.':'Serin tamamlandı. İletişimde kalalım.';
-    const finish=()=>{dialog.removeEventListener('close',finish);$('email-input').value='';resolve();};
-    dialog.addEventListener('close',finish);dialog.showModal();
-  });
-}
-$('email-form').onsubmit=e=>{e.preventDefault();if(!$('email-form').reportValidity())return;state.emailPreview=true;$('email-dialog').close();};
-$('email-skip').onclick=()=>$('email-dialog').close();
-$('prize-email').onclick=async()=>{const generation=state.generation;await askEmailPreview('prize');if(generation===state.generation)renderPrizeResult();};
 $('reward-details').onclick=()=>$('reward-dialog').showModal();
 $('close-reward').onclick=()=>$('reward-dialog').close();
 $('reward-daily').onclick=()=>{$('reward-dialog').close();selectMode('daily',$('m-daily'));$('spin').focus();$('wheel-stage').scrollIntoView({block:'center',behavior:'smooth'});};
+document.body.classList.add('campaign');
 function shareText(){
   const source=state.source==='demo'?' · Veri '+DATA_DATE:'';
   const text=state.mode==='daily'?`Stablex · Coin Düellosu ${state.day}\n${metricName()}${source}${state.practice?' · Antrenman':''}\n${state.dRes.map(r=>r?'🟩':'🟥').join('')} ${state.dRes.filter(Boolean).length}/5`:`Stablex · Coin Düellosu\n${metricName()}${source}\n${state.streak} seri yaptım. Rekorumu geçebilir misin?`;
+  const poolLine=typeof poolInfo==='function'&&poolInfo()?`\nTopluluk havuzunu birlikte büyütüyoruz: ${new Intl.NumberFormat('tr-TR').format(poolInfo().pool)} TL`:'';
   let base=runtime.gameURL; if(!base&&/^https?:$/.test(location.protocol)&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname))base=location.origin+location.pathname;
-  if(!base)return text+'\n(Yerel önizleme — oyun bağlantısı yayında eklenecek.)';
-  try{return text+'\n'+new URL(base).href;}catch{return text;}
+  if(!base)return text+poolLine+'\n(Yerel önizleme — oyun bağlantısı yayında eklenecek.)';
+  try{return text+poolLine+'\n'+new URL(base).href;}catch{return text+poolLine;}
 }
 let shareAsset=null,shareBuild=0,shareFormat='story';
 function scoreTitle(score){return score>=5?'Piyasa Kurdu':score>=3?'Keskin Göz':'Yarın Rövanş';}
@@ -539,7 +569,7 @@ async function buildChallengeCard(model){
   for(const [img,sym,x] of [[left,model.left,330],[right,model.right,750]]){const cy=1005;ctx.beginPath();ctx.arc(x,cy,70,0,Math.PI*2);ctx.fillStyle='#171717';ctx.fill();ctx.lineWidth=7;ctx.strokeStyle=coinColor(sym);ctx.stroke();if(img){ctx.save();ctx.beginPath();ctx.arc(x,cy,58,0,Math.PI*2);ctx.clip();ctx.drawImage(img,x-58,cy-58,116,116);ctx.restore();}else text(sym,x,cy+12,32);text(sym,x,cy+122,36,'#fff',800);}
   ctx.beginPath();ctx.arc(540,1005,36,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();text('VS',540,1016,26,'#141414',900);
   text(model.mode==='daily'?'Sen kaç yaparsın?':challengeLine(model.score,model.mode),540,1218,50,'#fff',900);
-  text('stablex.com.tr',540,1270,30,'#ff676b',800);
+  const pool=typeof poolInfo==='function'?poolInfo():null;text(pool?`Topluluk havuzu ${new Intl.NumberFormat('tr-TR').format(pool.pool)} TL · stablex.com.tr`:'stablex.com.tr',540,1270,pool?28:30,'#ff676b',800);
   text(`${date}${model.source==='demo'&&DATA_DATE!==date?' · Veri '+DATA_DATE:''} · Eğlence amaçlıdır, yatırım tavsiyesi değildir.`,540,1322,19,'#7a7a7a',400);
   ctx.restore();ctx.textAlign='left';
   canvas.setAttribute('aria-label',`${title?title+'. ':''}${model.score}${model.mode==='daily'?'/5':' doğru seri'}. ${model.results.filter(Boolean).length} doğru. ${model.practice?'Antrenman. ':''}${model.hardest?'En yakın düello':'Son karşılaşma'} ${model.left} ve ${model.right}.${model.source==='demo'?' Veriler '+DATA_DATE+' tarihli.':''}`);
