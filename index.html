@@ -440,7 +440,7 @@ function prepareSpin(){
   paintWheel('left');paintWheel('right');setProfile(state.profile,state.account);updateProgress();showStatus();
 }
 async function spinPair(generation){
-  cancelSpin();const rightOnly=state.round>0;const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  cancelSpin();const rightOnly=state.round>0;const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches||(typeof document!=='undefined'&&document.visibilityState==='hidden');
   if(rightOnly&&!reduced){
     const fade=$('wheel-left').animate([{opacity:1},{opacity:0}],{duration:180,easing:'ease-out',fill:'forwards'});wheelAnimations=[fade];
     await Promise.allSettled([fade.finished]);if(generation!==state.generation)return;
@@ -461,6 +461,7 @@ async function spinPair(generation){
   $('feedback').textContent='Coinler hazır. Sağdaki daha yüksek mi, daha düşük mü?';
   document.querySelector('.guess').focus({preventScroll:true});ensureAnswersVisible();
 }
+if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')wheelAnimations.forEach(a=>{try{a.finish();}catch{}});});
 $('spin').onclick=()=>{if($('spin').disabled)return;if(typeof requireJoin==='function'&&!requireJoin())return;$('spin').disabled=true;start();};
 paintWheel('left');paintWheel('right');
 
