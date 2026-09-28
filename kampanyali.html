@@ -319,9 +319,12 @@ const DEFAULT_MARKET={date:'2026-09-24',coins:[
  ["BONK","Bonk",0.29,0.13],["FLOKI","Floki",0.28,0.037],["WIF","dogwifhat",0.24,0.088],["GALA","Gala",0.097,0.019]
 ]};
 // Statik yayında sayfaya gömülen günlük veri (window.STABLEX_MARKET) varsa onu kullan.
-const MARKET=(()=>{const m=globalThis.STABLEX_MARKET;return m&&/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&Array.isArray(m.coins)&&m.coins.length>=6&&m.coins.every(c=>Array.isArray(c)&&typeof c[0]==='string'&&Number.isFinite(c[2])&&c[2]>0)?m:DEFAULT_MARKET;})();
+// Sayfaya gömülü veri: {date, coins, prev?}. Veri akşamdan ertesi gün için hazırlanır; bugünün verisi prev'de durur.
+function validMarket(m){return !!(m&&/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&Array.isArray(m.coins)&&m.coins.length>=6&&m.coins.every(c=>Array.isArray(c)&&typeof c[0]==='string'&&Number.isFinite(c[2])&&c[2]>0));}
+function pickMarket(raw,today){if(!validMarket(raw))return DEFAULT_MARKET;if(raw.date<=today)return raw;if(validMarket(raw.prev)&&raw.prev.date<=today)return raw.prev;return raw;}
+const MARKET=pickMarket(globalThis.STABLEX_MARKET,dayKey());
 const DATA_DATE=MARKET.date.split('-').reverse().join('.');
-const FALLBACK=MARKET.coins.map(([s,n,m,v])=>({s,n,m,v,img:null}));
+const FALLBACK=MARKET.coins.map(([s,n,m,v,m2])=>({s,n,m,v,m2:Number.isFinite(m2)&&m2>0?m2:null,img:null}));
 const DAILY_SYMBOLS=FALLBACK.map(c=>c.s).sort();
 const VERSION='stablex-daily-v3-five';
 function dayKey(date=new Date()){return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Istanbul',year:'numeric',month:'2-digit',day:'2-digit'}).format(date);}
@@ -335,9 +338,11 @@ function dailySymbols(day,metric='m',coins=FALLBACK){
 }
 // Preserve the day's exact 6-coin roster; vary only its order for each run.
 function dailyMatches(day,coins=FALLBACK,seed=0){
- const roster=dailySymbols(day,'m',coins),byS=new Map(coins.map(c=>[c.s,c.m]));
- // Değerleri birbirine %10'dan yakın çiftler art arda gelmesin: veri biraz oynasa bile doğru cevap değişmesin.
- const gap=(a,b)=>{const x=byS.get(a),y=byS.get(b);return x&&y?Math.abs(x-y)/Math.max(x,y):1;};
+ const roster=dailySymbols(day,'m',coins),byS=new Map(coins.map(c=>[c.s,c]));
+ // Değerleri birbirine %10'dan yakın çiftler art arda gelmesin. İkinci kaynak (m2) varsa sıralama iki kaynakta da aynı
+ // ve fark iki kaynakta da en az %10 olmalı: başka bir sitede kontrol eden oyuncu farklı cevap görmesin.
+ const rel=(x,y)=>Math.abs(x-y)/Math.max(x,y);
+ const gap=(a,b)=>{const x=byS.get(a),y=byS.get(b);if(!x||!y)return 1;const g=rel(x.m,y.m);if(!(x.m2&&y.m2))return g;if(Math.sign(x.m-y.m)!==Math.sign(x.m2-y.m2))return 0;return Math.min(g,rel(x.m2,y.m2));};
  let best=null,bestMin=-1;
  for(let attempt=0;attempt<200;attempt++){
   const symbols=[...roster],random=rnd((seed+attempt*0x9E3779B1)>>>0);
@@ -353,7 +358,7 @@ function hardestRound(rounds){return rounds.reduce((best,row)=>{const gap=Math.a
 function utm(url,mode,content){const u=new URL(url);u.searchParams.set('utm_source','game');u.searchParams.set('utm_medium','hangisi_buyuk');u.searchParams.set('utm_campaign',mode);u.searchParams.set('utm_content',content);return u.href;}
 function coinURL(symbol,mode){if(!LISTING[symbol])throw Error('Unknown coin');return 'https://stablex.com.tr/piyasalar/'+symbol.toLowerCase()+'try';}
 function normalizeMarkets(rows){if(!Array.isArray(rows))throw Error('Invalid market data');const byId=new Map(rows.map(r=>[r.id,r]));return Object.entries(LISTING).flatMap(([s,id])=>{const r=byId.get(id);if(!r||String(r.symbol).toUpperCase()!==s||typeof r.market_cap!=='number'||!Number.isFinite(r.market_cap)||r.market_cap<=0||typeof r.total_volume!=='number'||!Number.isFinite(r.total_volume)||r.total_volume<0)return [];return [{s,n:String(r.name).slice(0,100),m:r.market_cap/1e9,v:r.total_volume/1e9,img:'assets/coins/'+s.toLowerCase()+'.png'}];}).sort((a,b)=>a.s<b.s?-1:1);}
-return {COIN_COLORS,LISTING,STABLE,FALLBACK,DATA_DATE,DAILY_SYMBOLS,VERSION,dayKey,rnd,dailyPool,dailySymbols,dailyMatches,nextSeriesAt,hardestRound,utm,coinURL,normalizeMarkets};
+return {COIN_COLORS,LISTING,STABLE,FALLBACK,DATA_DATE,pickMarket,DAILY_SYMBOLS,VERSION,dayKey,rnd,dailyPool,dailySymbols,dailyMatches,nextSeriesAt,hardestRound,utm,coinURL,normalizeMarkets};
 });
 
 'use strict';

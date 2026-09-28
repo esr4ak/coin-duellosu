@@ -1,8 +1,13 @@
 name: Günlük piyasa verisi
 on:
   schedule:
-    - cron: '5 21 * * *'   # Her gün 00.05 (TSİ)
-  workflow_dispatch: {}
+    - cron: '0 15 * * *'   # Her gün 18.00 (TSİ): ertesi günün verisi hazırlanır
+  workflow_dispatch:
+    inputs:
+      hedef_gun:
+        description: 'Veri hangi gün için? (YYYY-AA-GG, boş = otomatik)'
+        required: false
+        default: ''
 permissions:
   contents: write
 jobs:
@@ -16,6 +21,7 @@ jobs:
       - name: Veriyi güncelle
         env:
           COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+          TARGET_DATE: ${{ github.event.inputs.hedef_gun }}
         run: node tools/update-market.mjs
       - name: Değişiklik varsa kaydet
         run: |
