@@ -233,6 +233,11 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
 
 .camp-dates{font-size:12px!important;color:var(--ink-2);margin:4px 0 0}.camp-dates b{color:var(--ink)}
 .join-check a{color:var(--ink);text-decoration:underline}
+
+/* Coin detay linkleri yalnızca cevaptan sonra görünür; oyun ortasında yanlışlıkla sayfadan çıkılmasın */
+.arena:not(.answered) .card .cta{visibility:hidden;pointer-events:none}
+.panel .share-top{width:100%;margin-top:2px}.panel .share-top .btn{width:100%;min-height:52px;font-size:16px}
+@media(max-width:360px){.play-shell .guess{font-size:13px;letter-spacing:0;padding-inline:4px}}
 </style>
 </head>
 <body>
@@ -275,12 +280,11 @@ h1{font-weight:800;letter-spacing:-.055em}.eyebrow{letter-spacing:.2em;font-size
   <section class="panel" id="over" tabindex="-1" aria-labelledby="over-title" hidden>
     <span class="result-kicker" id="result-label">BUGÜNÜN SKORUN</span><div class="result-big"><strong id="result-score">0</strong><span>/5</span></div><span class="score-title" id="score-title"></span><h2 id="over-title"></h2>
     <p id="over-text"></p>
-    <div class="grid-share result-grid" id="over-grid"></div><div class="hardest" id="hardest"><span class="result-kicker">EN ZOR KARŞILAŞMAN</span><strong id="hardest-pair"></strong><p id="hardest-note"></p><small>Değer farkı büyük olan değere bölünerek hesaplanır.</small></div><details class="round-details"><summary>5 karşılaşmanı incele</summary><ol id="round-summary"></ol></details><div class="countdown-box"><span class="result-kicker" id="countdown-label">YARININ SERİSİNE · TSİ 00.00</span><strong id="countdown">00:00:00</strong><span>Yeni coinler, yeni eşleşmeler.</span></div>
+    <div class="grid-share result-grid" id="over-grid"></div><div class="btns share-top"><button class="btn primary" id="share">Sonucunu paylaş ↗</button></div><div class="hardest" id="hardest"><span class="result-kicker">EN ZOR KARŞILAŞMAN</span><strong id="hardest-pair"></strong><p id="hardest-note"></p><small>Değer farkı büyük olan değere bölünerek hesaplanır.</small></div><details class="round-details"><summary>5 karşılaşmanı incele</summary><ol id="round-summary"></ol></details><div class="countdown-box"><span class="result-kicker" id="countdown-label">YARININ SERİSİNE · TSİ 00.00</span><strong id="countdown">00:00:00</strong><span>Yeni coinler, yeni eşleşmeler.</span></div>
     <div id="prize-result" class="hardest pool-result" hidden><span class="result-kicker">ORTAK HAVUZ · ÖNİZLEME</span><strong id="prize-title"></strong><p id="prize-note"></p><button class="btn primary kyc-cta" id="prize-share" hidden>Sonucunu paylaş · katılım şartı</button></div>
     <div class="btns">
       <button class="btn" id="again">Tekrar oyna</button>
-      <button class="btn primary" id="share">Sonucunu paylaş ↗</button>
-    </div>
+          </div>
     <span class="toast" id="toast" role="status" hidden>Kopyalandı</span><textarea id="share-fallback" class="share-fallback" aria-label="Paylaşım metni" readonly hidden></textarea>
   </section>
 
@@ -475,7 +479,7 @@ function tokenHTML(c){return `<div class="token"><img src="${assetURL('assets/co
 function cardHTML(c,side){const shown=side==='left';return `<span class="card-label">${shown?'Referans coin':'Tahmin et'}</span>${tokenHTML(c)}
 <h2 class="name">${esc(c.n)}</h2><span class="sym">${esc(c.s)}</span><span class="metric-label">${metricName()} · USD</span>
 <div class="value ${shown?'':'hidden-val'}" id="${side}-val" ${shown?`title="${precise(val(c))}"`:''}>${shown?fmt(val(c)):'? ? ?'}</div>
-${shown?'<p class="left-note">Diğer coinin değeri bundan daha yüksek mi, daha düşük mü?</p>':`<div class="guesses"><button class="guess hi" data-g="hi">↑ Daha yüksek</button><button class="guess lo" data-g="lo">↓ Daha düşük</button></div>`}
+${shown?'<p class="left-note">Diğer coinin değeri bundan daha yüksek mi, daha düşük mü?</p>':`<div class="guesses"><button class="guess hi" data-g="hi">↑ ${esc(c.s)} daha yüksek</button><button class="guess lo" data-g="lo">↓ ${esc(c.s)} daha düşük</button></div>`}
 <a class="cta" data-coin="${esc(c.s)}" data-position="${side}" href="${esc(coinURL(c.s,state.mode))}" target="_blank" rel="noopener noreferrer">${esc(c.s)} detayları <span aria-hidden="true">↗</span></a>`;}
 function updateProgress(){
   $('streak').textContent=state.streak;
@@ -490,7 +494,7 @@ function layoutAnswers(){const guesses=document.querySelector('.guesses');if(!gu
 mobileLayout.addEventListener('change',layoutAnswers);
 function render(){
   $('answer-bar').replaceChildren();
-  $('left').innerHTML=cardHTML(state.left,'left');$('right').innerHTML=cardHTML(state.right,'right');$('left').className='card';$('right').className='card enter';$('left').style?.setProperty?.('--cc',coinColor(state.left.s));$('right').style?.setProperty?.('--cc',coinColor(state.right.s));$('vs').className='vs';$('vs').textContent='VS';
+  $('left').innerHTML=cardHTML(state.left,'left');$('right').innerHTML=cardHTML(state.right,'right');$('arena')?.classList?.remove('answered');$('left').className='card';$('right').className='card enter';$('left').style?.setProperty?.('--cc',coinColor(state.left.s));$('right').style?.setProperty?.('--cc',coinColor(state.right.s));$('vs').className='vs';$('vs').textContent='VS';
   layoutAnswers();updateProgress();
   document.querySelectorAll('.guess').forEach(b=>b.onclick=()=>guess(b.dataset.g));
   document.querySelectorAll('.cta').forEach(a=>a.onclick=()=>track('coin_cta_click',{coin:a.dataset.coin,position:a.dataset.position,mode:state.mode}));
@@ -509,7 +513,7 @@ async function guess(g){
   else ok=(g==='hi'&&val(state.right)>=val(state.left))||(g==='lo'&&val(state.right)<=val(state.left));
   state.history.push({left:{...state.left},right:{...state.right},choice:g,ok});
   const el=$('right-val');el.classList.remove('hidden-val');el.title=precise(val(state.right));countUp(el,val(state.right));
-  $('right').classList.add(ok?'win':'lose');try{if(typeof navigator!=='undefined'&&!matchMedia('(prefers-reduced-motion:reduce)').matches)navigator.vibrate?.(ok?25:[30,60,30]);}catch{}$('vs').className='vs '+(ok?'ok':'no');$('vs').textContent=ok?'✓':'✕';
+  $('right').classList.add(ok?'win':'lose');$('arena')?.classList?.add('answered');try{if(typeof navigator!=='undefined'&&!matchMedia('(prefers-reduced-motion:reduce)').matches)navigator.vibrate?.(ok?25:[30,60,30]);}catch{}$('vs').className='vs '+(ok?'ok':'no');$('vs').textContent=ok?'✓':'✕';
   $('feedback').textContent=(ok?'Doğru tahmin! ':'Bu kez olmadı. ')+`${state.right.s}: ${fmt(val(state.right))} · ${state.left.s}: ${fmt(val(state.left))}`;
   const nextStreak=state.streak+(ok?1:0);
   track('guess',{mode:state.mode,metric:state.metric,left_coin:leftCoin,right_coin:rightCoin,choice:g,correct:ok,streak:nextStreak});
